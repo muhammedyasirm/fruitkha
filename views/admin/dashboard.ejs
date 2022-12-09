@@ -1,0 +1,86 @@
+
+<%- include('../partials/adminHeader')%>
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="container-fluid">
+          <!-- ============================================================== -->
+          <!-- Three charts -->
+          <!-- ============================================================== -->
+          <div class="row justify-content-between p-4">
+              <div class="col-lg-4 col-md-12 row pt-2 pb-2 border bg-dark  shadow">
+                  <div class="col-auto mx-auto">
+                      <div class="row">
+                          <div class="col-auto">
+                              <h3 class="box-title text-white">Total Orders</h3>
+                          </div>
+                          <div class="col-auto">
+                              <h4><span class="text-success" style="margin-top:5px;" id="totalOrders"></span></h4>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-4 col-md-12 row pt-2 pb-2 border bg-dark shadow">
+                  <div class="col-auto mx-auto">
+                      <div class="row">
+                          <div class="col-auto">
+                              <h4 class="box-title text-white">Cash On Delivery</h4>
+                          </div>
+                          <div class="col-auto">
+                              <h4><span class="text-success" style="margin-top:5px;" id="COD"></span></h4>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-4 col-md-12 row pt-2 pb-2 border bg-dark shadow">
+                  <div class="col-auto mx-auto">
+                      <div class="row">
+                          <div class="col-auto">
+                              <h3 class="box-title text-white">Razorpay</h3>
+                          </div>
+                          <div class="col-auto">
+                              <h4><span class="text-success" style="margin-top:5px;" id="razorpay"></span></h4>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+            
+      
+      
+      
+      
+          <!-- ============================================================== -->
+          <!-- PRODUCTS YEARLY SALES -->
+          <!-- ============================================================== -->
+          <div class="row">
+              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 container-fluid shadow">
+                  
+                  <div id="ct-visits" >
+                      <h3 class="box-title text-center">Sales</h3>
+                      <canvas id="myChart" style="width:100%; background-color: rgb(181, 187, 187); ;"></canvas>
+                  </div>
+              </div>
+          </div>
+      
+           <div class="row">
+              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 container-fluid shadow">
+                  
+                  <div id="ct-visits" >
+                      <h3 class="box-title text-center mt-5">Payment</h3>
+                       <canvas id="myChartD" style="width:100%;"></canvas>
+                  </div>
+              </div>
+          </div>
+          
+       
+      
+      </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+      </main>
+
+
+      <script src="https://kit.fontawesome.com/0a64a260ef.js" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

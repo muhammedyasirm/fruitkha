@@ -1,0 +1,94 @@
+body {
+    font-family: sans-serif;
+   
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-pane {
+    transition: 250ms;
+    position: fixed;
+    transform: translateX(-350px);
+    top: 0;
+    height: 100vh;
+    width: 348px;
+    background:#F2F2F2 ;
+    border-right: 2px solid #e8e5e5;
+    display: flex;
+    flex-direction: column;
+   
+    box-shadow: 0px 3px 10px rgba(33, 33, 33, 0.5);
+    z-index: 2;
+  }
+  @media screen and (max-width: 620px) {
+    .nav-pane {
+      width: 298px;
+      transform: translateX(-300px);
+    }
+  }
+  .nav-pane h1 {
+    margin: 0;
+    text-align: center;
+    color: #F1F1F1;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+  }
+  .nav-pane.open {
+    transform: translateX(0);
+    transition: 250ms;
+  }
+  
+  .toggle-nav {
+    position: relative;
+    top: 25px;
+    right: 25px;
+    left: 10px;
+    cursor: pointer;
+    color: #212121;
+  }
+  .toggle-nav.open span.m, .toggle-nav.open span.n, .toggle-nav.open span.u {
+    opacity: 1;
+  }
+  .toggle-nav span.m, .toggle-nav span.n, .toggle-nav span.u {
+    font-size: 1.05rem;
+    opacity: 0;
+    transition: 250ms;
+    letter-spacing: 2px;
+  }
+  .toggle-nav span.e {
+    display: inline-block;
+    height: 12px;
+    width: 17px;
+  }
+  .toggle-nav span.e.btn-close span.bar:nth-child(1) {
+    transition: 250ms;
+    transform: rotate(45deg);
+    top: 5px;
+  }
+  .toggle-nav span.e.btn-close span.bar:nth-child(2) {
+    opacity: 0;
+    transition: 250ms;
+  }
+  .toggle-nav span.e.btn-close span.bar:nth-child(3) {
+    transition: 250ms;
+    transform: rotate(-45deg);
+    bottom: 5px;
+  }
+  .toggle-nav span.e span.bar {
+    transition: 250ms;
+    position: relative;
+    display: block;
+    background: #212121;
+    border-radius: 1px;
+    border-bottom: 1px solid #616161;
+    width: 15px;
+    height: 1px;
+  }
+  .toggle-nav span.e span.bar:nth-child(2) {
+    margin: 3px 0;
+  }
+  
+  .toggle-nav:hover span.m, .toggle-nav:hover span.n, .toggle-nav:hover span.u {
+    opacity: 1;
+    transition: 250ms;
+  }

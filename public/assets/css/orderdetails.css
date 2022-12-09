@@ -1,0 +1,605 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif
+}
+
+body {
+    background-color:transparent;
+}
+
+#order-heading {
+    background-color: #edf4f7;
+    position: relative;
+    max-width: 1200px;
+    margin: 30px auto 0px
+}
+
+#order-heading .text-uppercase {
+    font-size: 0.9rem;
+    color: #777;
+    font-weight: 600
+}
+
+#order-heading .h4 {
+    font-weight: 600
+}
+
+#order-heading .h4+div p {
+    font-size: 0.8rem;
+    color: #777
+}
+
+.close {
+    padding: 10px 15px;
+    background-color: #777;
+    border-radius: 50%;
+    position: absolute;
+    right: -15px;
+    top: -20px
+}
+
+.wrapper {
+    padding: 0px 50px 50px;
+    max-width: 1300px;
+    margin: 0px auto 40px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px
+}
+
+.table th {
+    border-top: none
+}
+
+.table thead tr.text-uppercase th {
+    font-size: 0.8rem;
+    padding-left: 0px;
+    padding-right: 0px
+}
+
+.table tbody tr th,
+.table tbody tr td {
+    font-size: 0.9rem;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 5px
+}
+
+.table-responsive {
+    height: 60px
+}
+
+.list div b {
+    font-size: 0.8rem
+}
+
+.list .order-item {
+    font-weight: 600;
+    color: #6db3ec
+}
+
+.list:hover {
+    background-color: #f4f4f4;
+    cursor: pointer;
+    border-radius: 5px
+}
+
+label {
+    margin-bottom: 0;
+    padding: 0;
+    font-weight: 900
+}
+
+button.btn {
+    font-size: 0.9rem;
+    background-color: #66cdaa
+}
+
+button.btn:hover {
+    background-color: #5cb99a
+}
+
+.price {
+    color: #5cb99a;
+    font-weight: 700
+}
+
+p.text-justify {
+    font-size: 0.9rem;
+    margin: 0
+}
+
+.row {
+    margin: 0px
+}
+
+.subscriptions {
+    border: 1px solid #ddd;
+    border-left: 5px solid #ffa500;
+    padding: 10px
+}
+
+.subscriptions div {
+    font-size: 0.9rem
+}
+
+@media(max-width: 425px) {
+    .wrapper {
+        padding: 20px
+    }
+
+    body {
+        font-size: 0.85rem
+    }
+
+    .subscriptions div {
+        padding-left: 5px
+    }
+
+    img+label {
+        font-size: 0.75rem
+    }
+}
+.book-img {
+    width: 80px;
+    height: 120px;
+    }
+
+    
+    .card {
+        padding-left: 15px;
+        padding-right: 15px;
+        }
+       
+        .pad-left {
+        padding-left: 20px;
+        }   
+
+@media screen and (max-width: 768px) {
+   
+    .container {
+    padding: 0 2rem !important;
+    }
+   
+    .book,
+    .book-img {
+    width: 80px;
+    height: 120px;
+    }
+   
+    .card {
+    padding-left: 15px;
+    padding-right: 15px;
+    }
+   
+    .pad-left {
+    padding-left: 20px;
+    }
+   }  
+
+
+   
+
+   * {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+  }
+  
+  body {
+    font-family:Inter, sans-serif;
+   
+  }
+  
+  .progress-Bar ul {
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    text-align:center;
+    list-style:none;
+    max-width:1100px;
+    margin:0 auto;
+    padding:0;
+  }
+  
+  .progress-Bar ul li {
+   position:relative;
+   z-index:10;
+  }
+  
+  .progress-Bar ul li::before {
+    content:'';
+    display:block;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background-color:#666;
+    margin:0 auto -50px auto;
+    position:relative;
+    z-index:10;
+  }
+  
+  .progress-Bar ul li::after {
+    content:'';
+    display:block;
+    position:absolute;
+    top:7px;
+    left:50%;
+    z-index:-1;
+    width:100%;
+    height:4px;
+    background:#666;
+  }
+  
+  .progress-Bar ul li span {
+    display:block;
+    position:absolute;
+    top:7px;
+    left:50%;
+    z-index:-1;
+    width:0;
+    height:4px;
+    background:#666;
+    z-index:2;
+  }
+  
+  .progress-Bar ul li:last-child span,
+  ul li:last-child::after {
+    display:none;
+  }
+  
+  .progress-Bar ul .completed::before {
+    background:#666;
+  }
+  
+  .progress-Bar ul .completed span {
+    width:100%;
+  }
+  
+  .progress-Bar ul .completed {
+    animation: colorAnimation 1s forwards;
+  }
+  
+  .progress-Bar ul .completed span {
+     animation: myAnimation 1s forwards;
+  }
+  
+  .progress-Bar ul .completed::before {
+    animation: bgAnimation 1s forwards;
+  }
+  
+  .progress-Bar ul .completed:nth-child(2),
+  .progress-Bar ul .completed:nth-child(2)::before,
+  .progress-Bar ul .completed:nth-child(2) span {
+    animation-delay:1s !important;
+  }
+  .progress-Bar ul .completed:nth-child(3),
+  .progress-Bar ul .completed:nth-child(3)::before,
+  .progress-Bar ul .completed:nth-child(3) span {
+    animation-delay:2s !important;
+  }
+  
+  .progress-Bar ul .completed:nth-child(4),
+  .progress-Bar ul .completed:nth-child(4)::before,
+  .progress-Bar ul .completed:nth-child(4) span {
+    animation-delay:3s !important;
+  }
+  
+ 
+  
+  @keyframes myAnimation {
+    0% {
+      background-color:#5cb85c	;
+      width:0;
+    }
+    
+    100% {
+      background-color:#5cb85c	;
+      width:100%;
+    }
+  }
+  
+  @keyframes bgAnimation {
+    0% {
+      background-color:#666;
+    }
+    
+    100% {
+      background-color:#5cb85c	;
+    }
+  }
+  
+  @keyframes colorAnimation {
+    0% {
+      color:#666;
+    }
+    
+    100% {
+      color:#5cb85c	;
+    }
+  }
+
+  /*---------------Danger-----------------------------  */
+   .progress-Bar ul {
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    text-align:center;
+    list-style:none;
+    max-width:1100px;
+    margin:0 auto;
+    padding:0;
+  }
+  
+  .progress-Bar ul li {
+   position:relative;
+   z-index:10;
+  }
+  
+  .progress-Bar ul li::before {
+    content:'';
+    display:block;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background-color:#666;
+    margin:0 auto -50px auto;
+    position:relative;
+    z-index:10;
+  }
+  
+  .progress-Bar ul li::after {
+    content:'';
+    display:block;
+    position:absolute;
+    top:7px;
+    left:50%;
+    z-index:-1;
+    width:100%;
+    height:4px;
+    background:#666;
+  }
+  
+  .progress-Bar ul li span {
+    display:block;
+    position:absolute;
+    top:7px;
+    left:50%;
+    z-index:-1;
+    width:0;
+    height:4px;
+    background:#666;
+    z-index:2;
+  }
+  
+  .progress-Bar ul li:last-child span,
+  ul li:last-child::after {
+    display:none;
+  }
+  
+  .progress-Bar ul .completed::before {
+    background:#666;
+  }
+  
+  .progress-Bar ul .completed span {
+    width:100%;
+  }
+  
+  .progress-Bar ul .completed {
+    animation: colorAnimation 1s forwards;
+  }
+  
+  .progress-Bar ul .completed span {
+     animation: myAnimation 1s forwards;
+  }
+  
+  .progress-Bar ul .completed::before {
+    animation: bgAnimation 1s forwards;
+  }
+  
+  .progress-Bar ul .completed:nth-child(2),
+  .progress-Bar ul .completed:nth-child(2)::before,
+  .progress-Bar ul .completed:nth-child(2) span {
+    animation-delay:1s !important;
+  }
+  .progress-Bar ul .completed:nth-child(3),
+  .progress-Bar ul .completed:nth-child(3)::before,
+  .progress-Bar ul .completed:nth-child(3) span {
+    animation-delay:2s !important;
+  }
+  
+  .progress-Bar ul .completed:nth-child(4),
+  .progress-Bar ul .completed:nth-child(4)::before,
+  .progress-Bar ul .completed:nth-child(4) span {
+    animation-delay:3s !important;
+  }
+  
+ 
+  
+  @keyframes myAnimation {
+    0% {
+      background-color:#5cb85c	;
+      width:0;
+    }
+    
+    100% {
+      background-color:#5cb85c	;
+      width:100%;
+    }
+  }
+  
+  @keyframes bgAnimation {
+    0% {
+      background-color:#666;
+    }
+    
+    100% {
+      background-color:#5cb85c	;
+    }
+  }
+  
+  @keyframes colorAnimation {
+    0% {
+      color:#666;
+    }
+    
+    100% {
+      color:#5cb85c	;
+    }
+  }
+
+  /* ----------------------DANGER-------------------------------- */
+
+  .progress-Bars ul {
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    text-align:center;
+    list-style:none;
+    max-width:1100px;
+    margin:0 auto;
+    padding:0;
+  }
+  
+  .progress-Bars ul li {
+   position:relative;
+   z-index:10;
+  }
+  
+  .progress-Bars ul li::before {
+    content:'';
+    display:block;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background-color:#666;
+    margin:0 auto -50px auto;
+    position:relative;
+    z-index:10;
+  }
+  
+  .progress-Bars ul li::after {
+    content:'';
+    display:block;
+    position:absolute;
+    top:7px;
+    left:50%;
+    z-index:-1;
+    width:100%;
+    height:4px;
+    background:#666;
+  }
+  
+  .progress-Bars ul li span {
+    display:block;
+    position:absolute;
+    top:7px;
+    left:50%;
+    z-index:-1;
+    width:0;
+    height:4px;
+    background:#666;
+    z-index:2;
+  }
+  
+  .progress-Bars ul li:last-child span,
+  ul li:last-child::after {
+    display:none;
+  }
+  
+  .progress-Bars ul .completed::before {
+    background:#666;
+  }
+  
+  .progress-Bars ul .completed span {
+    width:100%;
+  }
+  
+  .progress-Bars ul .completed {
+    animation: colorAnimations 1s forwards;
+  }
+  
+  .progress-Bars ul .completed span {
+     animation: myAnimations 1s forwards;
+  }
+  
+  .progress-Bars ul .completed::before {
+    animation: bgAnimations 1s forwards;
+  }
+  
+  .progress-Bars ul .completed:nth-child(2),
+  .progress-Bars ul .completed:nth-child(2)::before,
+  .progress-Bars ul .completed:nth-child(2) span {
+    animation-delay:1s !important;
+  }
+  .progress-Bars ul .completed:nth-child(3),
+  .progress-Bars ul .completed:nth-child(3)::before,
+  .progress-Bars ul .completed:nth-child(3) span {
+    animation-delay:2s !important;
+  }
+  
+  .progress-Bars ul .completed:nth-child(4),
+  .progress-Bars ul .completed:nth-child(4)::before,
+  .progress-Bars ul .completed:nth-child(4) span {
+    animation-delay:3s !important;
+  }
+  
+ 
+  
+  @keyframes myAnimations {
+    0% {
+      background-color:#d9534f	;
+      width:0;
+    }
+    
+    100% {
+      background-color:#d9534f	;
+      width:100%;
+    }
+  }
+  
+  @keyframes bgAnimations {
+    0% {
+      background-color:#666;
+    }
+    
+    100% {
+      background-color:#d9534f	;
+    }
+  }
+  
+  @keyframes colorAnimations {
+    0% {
+      color:#666;
+    }
+    
+    100% {
+      color:#d9534f	;
+    }
+  }
+
+  /* -------------------------------Address----------------------------------- */
+
+  .plus-button{
+    margin-left: -5px !important;
+   }
+   
+   .new-box {
+    border-color: #8b8538 !important
+   }
+   
+   .new-box:hover {
+    background: #f3f2e5
+   }
+   
+   .new-address {
+    width: 100%;
+   }
+   
+   .action-address {
+    cursor: pointer;
+   }
+   
+   .modal-header {
+    border-bottom:none !important ;
+   }

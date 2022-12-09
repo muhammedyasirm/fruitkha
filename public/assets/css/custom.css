@@ -1,0 +1,57 @@
+/*
+Custom Css
+*/
+.logo{
+    display: block;
+    justify-content: center;
+    height: 5rem;
+    width: 10rem;
+}
+
+
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 3px;
+    background: black; 
+ 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background:black ; 
+}
+
+.swal-delete {
+    border-radius: 0 !important;
+    background-color:  lightgray !important;
+       
+  }
+
+  /* .swal-delete .swal-text ,.swal-title{
+    color: white;
+  } */
+
+
+
+.badge{
+    z-index: 3;
+}
+
+.glass{
+    background-color: transparent;
+}
+
+  
+
+  
