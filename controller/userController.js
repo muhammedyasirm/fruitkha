@@ -39,7 +39,8 @@ const getHomeN = async(req,res)=>{
     } else{
         customer = false;
     }
-    let products = await product.find();
+    let products = await product.find({}).limit(3);
+    console.log("Products home",products);
     res.render('user/index',{customer,products});
 }
 
@@ -113,22 +114,6 @@ const postOtp = async(req,res)=>{
     } else {
         res.redirect(`/otp?email=${user.Email}`);
     }
-//     if(OTP === otp){
-//         try {
-//             const user = await users.create({
-//                 Fullname: Fullname,
-//                 Email: Email,
-//                 Phonenumber: Phonenumber,
-//                 Password: Password
-
-//             })
-//         } catch (error) {
-//             console.log('Error Happened');
-//         }
-//         res.redirect('/userLogin');
-//     } else {
-//         res.redirect('/otp');
-//     }
 };
 
 
@@ -192,8 +177,10 @@ const getProductView = async(req,res)=>{
     }
      const id = req.params.id;
     const productSingle = await product.findOne({_id:id});
-    res.render('user/singleProduct',{productSingle,customer});
-    console.log(productSingle);
+    const length = productSingle.image.length;
+    console.log("length",length);
+    res.render('user/singleProduct',{productSingle,customer,length});
+    console.log("ProductSingle",productSingle.image);
 
 }
 
@@ -333,14 +320,13 @@ const viewCart = async(req,res) =>{
         const sum = productData.reduce((accumulator,object)=>{
             return accumulator+object.productPrice;
         },0);
-        console.log('hio');
-        console.log(productData);
         countInCart = productData.length;
         if(sum>1000){
           shipping = 0;
         } else {
             shipping = 75
         }
+        console.log("Product Data   ",productData);
         res.render('user/cart',{productData , sum , countInCart , customer , shipping})
     } else {
         res.redirect('/userLogin');
@@ -370,18 +356,24 @@ const removeProduct = async(req,res)=>{
 
 const changeQuantity = async(req,res)=>{
     const data = req.body;
-    //console.log(data)
     const objId = mongoose.Types.ObjectId(data.product);
-    //console.log(objId);
-    cart.updateOne(
-        {
-        _id:data.cart,"product.productId":objId
-        },
-        {$inc: { "product.$.quantity":data.count}}
-    ).then(()=>{
-        res.json({status:true});
+    data.count = parseInt(data.count);
+    data.quantity = parseInt(data.quantity);
+    if(data.count==-1 && data.quantity==1){
+        res.json({quantity:true})
+    }else{
+        cart.updateOne(
+            {
+            _id:data.cart,"product.productId":objId
+            },
+            {$inc: { "product.$.quantity":data.count}}
+        ).then(()=>{
+            res.json({status:true});
+    
+        })
+    }
 
-    })
+    
 }
 
 

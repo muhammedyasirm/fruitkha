@@ -11,6 +11,9 @@ const userModel = require('../model/userModel');
 const products = require('../model/productModel');
 const categories = require('../model/categoryModel');
 const { find } = require('../model/userModel');
+const multer = require('multer')
+const { cloudinary } = require('../cloudinary');
+const cart = require('../model/cartModel');
 
 const getDashboard = (req,res)=>{
     let session = req.session.admin;
@@ -95,26 +98,31 @@ const postAddProduct = async(req,res)=>{
     //let session = req.session.consumer;
     try {
         let categoryId = req.body.category 
-        // console.log(categoryId)
-        const image = req.files.product_image;
+        //const image = req.files.product_image;
         const Product = new products({
             product_name: req.body.product_name,
             price: req.body.price, 
             category: categoryId,
             description: req.body.description,
             stock: req.body.stock
-        })
+        }); 
+        Product.image = req.files.map((f)=>({url:f.path, filename:f.filename}));
+        console.log(req.files);
+        console.log("product after map",Product);
+
         const productDetails = await Product.save();
-        if(productDetails){
-            let productId = productDetails._id;
-            image.mv('./public/images/'+productId+'.jpg',(err)=>{
-                if(!err){
-                    res.redirect('/productdetails')
-                } else {
-                    console.log(err);
-                }
-            })
-        }
+        console.log(productDetails);
+        res.redirect('/productdetails');
+        // if(productDetails){
+        //     let productId = productDetails._id;
+        //     image.mv('./public/images/'+productId+'.jpg',(err)=>{
+        //         if(!err){
+        //             res.redirect('/productdetails')
+        //         } else {
+        //             console.log(err); 
+        //         }
+        //     })
+        // }
         
     } catch (error) {
         console.log(error.message);
@@ -126,7 +134,7 @@ const getProductDetails = async (req,res)=> {
     let session = req.session.admin;
     if(session){
         let product = await products.find().populate('category')
-        //console.log(product);
+        console.log(product);
         res.render('admin/productDetails',{product});
     } else {
         res.redirect('/adminLogin');
@@ -136,43 +144,71 @@ const getProductDetails = async (req,res)=> {
 const editProduct = async(req,res)=>{
     const id = req.params.id;
     const category = await categories.find();
-    const productData = await products.findOne({_id:id});
+    const productData = await products.findOne({_id:id}).populate('category');
     res.render('admin/editProduct',{productData,category})
 }
 
 const postEditProduct = async(req,res) => {
-   // console.log(req.body.category);
-    const id = req.params.id;
-    //console.log(id);
-    //console.log(req.body.category);
-    //let category = mongoose.Types.ObjectId(id)
-    //console.log("id",category);
-    await products.updateOne({_id:id},{$set:{
-        product_name: req.body.product_name,
-        price: req.body.price,
-        category: req.body.category,
-        description: req.body.description,
-        sotck:req.body.stock
-    }});
-    if(req?.files?.product_image){
-        const image = req.files.product_image;
-        image.mv('./public/images/'+id+'.jpg',(err)=>{
-            if(!err){
-                res.redirect('/productdetails');
-            } else {
-                console.log(err);
-            }
-        })
-    } else {
-        res.redirect('/productdetails');
-    }
+    // console.log("edit req.Body",req.body);
+    // console.log("edit req.file",req.files);
+   const photos = req.files.map((f)=>({
+    url:f.path,
+    filename: f.filename,
+   }));
+
+   const {
+    product_name,
+    price,
+    category,
+    description,
+    stock
+   } = req.body;
+  try {
+    console.log('params = ',req.params);
+    const product = await products.findByIdAndUpdate(req.params.id,{
+        product_name,price,category,description,stock
+    });
+    console.log('productImage',product);
+    console.log('photos= ',photos);
+    product.image.push(...photos);
+    product.save();
+    res.redirect('/productdetails');
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-const getDelete = async (req,res) =>{
-    const id = req.params.id;
-    await products.deleteOne({_id:id}).then(()=>{
+const getDelete =(req,res) =>{
+    try{
+        const id = req.params.id;
+        console.log("DeleteId",id);
+        const objId = mongoose.Types.ObjectId(id);
+        products.updateOne({_id:id},{$set:{isDeleted:true}}).then(()=>{
+            cart.updateMany(
+                {"product.productId":objId},
+                {$pull:{product:{productId:objId}}},
+                {multi : true}
+            ).then((data)=>{
+                res.redirect('/productdetails');
+            })
+        })
+    } catch(error){
+        console.log(error);
+    }
+} 
+
+const getRestore = (req,res)=>{
+    try {
+       const id = req.params.id;
+       console.log("Restore",id);
+       products.updateOne({_id:id},{$set:{isDeleted:false}}).then(()=>{
         res.redirect('/productdetails');
-    })
+       })
+       
+    
+}catch(error){
+    console.log(error);
+}
 }
 
 const getCategory = async(req,res)=>{
@@ -222,4 +258,4 @@ const deleteCategory = async(req,res)=>{
 module.exports = {  getAdminLogin,postAdminLogin,getDashboard,getUserDetails,blockUser,
                     unblockUser,getLogout,addproducts,postAddProduct,getProductDetails,
                     editProduct,postEditProduct,getDelete,getCategory,addCategory,editCategory,
-                    deleteCategory}
+                    deleteCategory,getRestore}

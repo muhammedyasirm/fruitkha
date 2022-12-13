@@ -21,8 +21,17 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="images p-3">
-								<div class="text-center p-4"> <img id="main-image" src="/images/<%=productSingle._id%>.jpg" width="250" /> </div>
-								<div class="thumbnail text-center"> <img onclick="change_image(this)" src="/images/<%=productSingle._id%>.jpg" width="70"> <img onclick="change_image(this)" src="/images/<%=productSingle._id%>.jpg" width="70"> </div>
+								<div class="text-center p-4">
+									<figure id="zoomer" class="zoom" onmousemove="zoom(event)" style="background-image: url(<%=productSingle.image[0].url%>);width: 350px; height: 300px;">
+									 <img id="main-image" style="width: 350px;height: 300px;" src="<%=productSingle.image[0].url%>" /> 
+									</figure>
+								</div>
+								<div class="thumbnail text-center"> 
+									<% if(productSingle.image.length>1){ for(let i=0;i<productSingle.image.length;i++) {%> 
+									<img onclick="change_image(this)"src="<%=productSingle.image[i].url%>" style="width: 70px; height: 60px;" width="70"> 
+									<%}}%>
+								</div>
+								
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -30,12 +39,18 @@
 								<div class="d-flex justify-content-between align-items-center">
 								</div>
 								<div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">Good Fruits For Good Health</span>
-									<h5 class="text-uppercase"><%=productSingle.product_name%></h5>
-									<div class="price d-flex flex-row align-items-center"> <span class="act-price">₹ <%=productSingle.price%></span>
+									<h3 class="text-uppercase"><%=productSingle.product_name%></h3>
+									<div class="price d-flex flex-row align-items-center"> <span class="act-price"><h5>₹ <%=productSingle.price%></h5></span>
 									</div>
 								</div>
 								<p class="about"><%=productSingle.description%></p>
-								<div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">Add to cart</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
+								<div class="cart mt-4 align-items-center"> 
+									<% if (customer) { %>
+										<a href="/addToCart/<%=productSingle._id%>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+										<% } else {%>
+											<a href="/userLogin" class="cart-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+										<% } %>
+									 </div>
 							</div>
 						</div>
 					</div>
@@ -212,6 +227,30 @@
 	<script src="http://localhost:4000/assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="http://localhost:4000/assets/js/main.js"></script>
+	<script>
+		function change_image(image){
+		let container = document.getElementById("main-image");
+		let zoomer = document.getElementById("zoomer");
+		container.src = image.src;
+		zoomer.style.backgroundImage = "url("+image.src+")"
+	}
+	document.addEventListener("DOMContentLoaded", function(event) {
+	});
+
+function offZoom(e) {
+    img.style.transformOrigin = `center center`;
+    img.style.transform = "scale(1)";
+}
+
+function zoom(e){
+  var zoomer = e.currentTarget;
+  e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
+  e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
+  x = offsetX/zoomer.offsetWidth*100
+  y = offsetY/zoomer.offsetHeight*100
+  zoomer.style.backgroundPosition = x + '% ' + y + '%';
+}
+	</script>
 
 </body>
 </html>

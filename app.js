@@ -9,8 +9,6 @@ db.once('open',function(callback){
     console.log("connection success");
 });
 
-const fileUpload = require('express-fileupload')
-
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
@@ -41,7 +39,9 @@ app.use(function(req,res,next){
 }
 )
 
-app.use(fileUpload());
+app.use(express.json());
+
+app.use(express.urlencoded({extended:true}));
 
 app.use('/',userRoute);
 

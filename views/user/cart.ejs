@@ -14,108 +14,137 @@
 	<!-- end breadcrumb section -->
 
 	<!-- cart -->
+
 	<div class="cart-section mt-150 mb-150">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-8 col-md-12">
-					<div class="cart-table-wrap">
-						<table class="cart-table">
-							<thead class="cart-table-head">
-								<tr class="table-head-row">
-									<th class="product-remove"></th>
-									<th class="product-image">Product Image</th>
-									<th class="product-name">Name</th>
-									<th class="product-price">Price</th>
-									<th class="product-quantity">Quantity in Kg</th>
-									<th class="product-total">Total Price</th>
-								</tr>
-							</thead>
-							<tbody>
-								<%productData.forEach((product)=>{%>
-								<tr class="table-body-row">
-									<td class="product-remove"><button onclick="removeProduct('<%=product._id%>','<%=product.productDetail._id%>')"><i class="far fa-window-close" style="border: none;"></i></a></td>
-									<td class="product-image"><img src="/images/<%=product.productDetail._id%>.jpg" alt=""></td>
+			<% if(countInCart!==0){ %>
+				<div class="row">
+					<div class="col-lg-8 col-md-12">
+						<div class="cart-table-wrap">
+							<table class="cart-table">
+								<thead class="cart-table-head">
+									<tr class="table-head-row">
+										<th class="product-remove"></th>
+										<th class="product-image">Product Image</th>
+										<th class="product-name">Name</th>
+										<th class="product-price">Price</th>
+										<th class="product-quantity">Quantity in Kg</th>
+										<th class="product-total">Total Price</th>
+									</tr>
+								</thead>
+								<tbody>
+									<%productData.forEach((product)=>{%>
+										<tr class="table-body-row">
+											<td class="product-remove"><button
+													onclick="removeProduct('<%=product._id%>','<%=product.productDetail._id%>')"><i
+														class="far fa-window-close" style="border: none;"></i></a></td>
+											<td class="product-image"><img
+													src="<%= product.productDetail.image[0].url%> " alt=""></td>
 
-									<td class="product-name"><%=product.productDetail.product_name%></td>
+											<td class="product-name">
+												<%=product.productDetail.product_name%>
+											</td>
 
-									<td class="product-price"><p id="price"><%=product.productDetail.price%></p></td>
+											<td class="product-price">
+												<p id="price">
+													<%=product.productDetail.price%>
+												</p>
+											</td>
 
-									<div class="product_count">
-									<td>
-										<div class="container d-flex">
-											<button
-												class="cart-item-count  mr-3" 
-												onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
-											<p id="<%= product.productDetail._id %>" min="0" name="quantity"><%= product.productQuantity%></p>
-											
-											<button class="cart-item-count ml-3 mr-3"
-												onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)">+</button>
-										</div>
-										
-										<!-- <button onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>','1')"class="increase items-count"type="button">
+											<div class="product_count">
+												<td>
+													<div class="container d-flex">
+														<button class="cart-item-count  mr-3"
+															onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
+														<p id="<%= product.productDetail._id %>" min="0"
+															name="quantity">
+															<%= product.productQuantity%>
+														</p>
+
+														<button class="cart-item-count ml-3 mr-3"
+															onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)">+</button>
+													</div>
+
+													<!-- <button onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>','1')"class="increase items-count"type="button">
 										<i class="lnr lnr-chevron-up"></i></button>
 										<p id="<%= product.productDetail._id %>" min="0" name="quantity"><%= product.productQuantity%></p>
 									    <button onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>','-1')"class="reduced items-count"type="button">
 									 	<i class="lnr lnr-chevron-down"></i></button> -->
-									</td>
-										</div>
-										<td class="product-total" id="total<%=product._id%>">₹<%=product.productQuantity * product.productDetail.price%></td>
-									<!-- <td class="product-total">1</td> -->
-								</tr>
-								<%})%>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<div class="col-lg-4">
-					<div class="total-section">
-						<table class="total-table">
-							<thead class="total-table-head">
-								<tr class="table-total-row">
-									<th>Total</th>
-									<th>Price</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="total-data">
-									<td><strong>Subtotal: </strong></td>
-									<td><%=sum%></td>
-								</tr>
-								<tr class="total-data">
-									<td><strong>Shipping: </strong></td>
-									<td>₹<%=shipping%></td>
-									
-								</tr>
-								<tr class="total-data">
-									<td><strong>Coupon Applied:</strong></td>
-									<td>₹0</td>
-								</tr>
-								<tr class="total-data">
-									<td><strong>Total: </strong></td>
-									<td>₹<%=sum + shipping%></td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="cart-buttons">
-							<a href="/shop" class="boxed-btn">Continue Shopping</a>
-							<a href="checkout.html" class="boxed-btn black">Check Out</a>
+												</td>
+											</div>
+											<td class="product-total" id="total<%=product._id%>">₹
+												<%=product.productQuantity * product.productDetail.price%>
+											</td>
+											<!-- <td class="product-total">1</td> -->
+										</tr>
+										<%})%>
+								</tbody>
+							</table>
 						</div>
 					</div>
 
-					<div class="coupon-section">
-						<h3>Apply Coupon</h3>
-						<div class="coupon-form-wrap">
-							<form action="index.html">
-								<p><input type="text" placeholder="Coupon"></p>
-								<p><input type="submit" value="Apply"></p>
-							</form>
+					<div class="col-lg-4">
+						<div class="total-section">
+							<table class="total-table">
+								<thead class="total-table-head">
+									<tr class="table-total-row">
+										<th>Total</th>
+										<th>Price</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="total-data">
+										<td><strong>Subtotal: </strong></td>
+										<td>
+											<%=sum%>
+										</td>
+									</tr>
+									<tr class="total-data">
+										<td><strong>Shipping: </strong></td>
+										<td>₹<%=shipping%>
+										</td>
+
+									</tr>
+									<tr class="total-data">
+										<td><strong>Coupon Applied:</strong></td>
+										<td>₹0</td>
+									</tr>
+									<tr class="total-data">
+										<td><strong>Total: </strong></td>
+										<td>₹<%=sum + shipping%>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="cart-buttons">
+								<a href="/shop" class="boxed-btn">Continue Shopping</a>
+								<a href="checkout.html" class="boxed-btn black">Check Out</a>
+							</div>
+						</div>
+
+						<div class="coupon-section">
+							<h3>Apply Coupon</h3>
+							<div class="coupon-form-wrap">
+								<form action="index.html">
+									<p><input type="text" placeholder="Coupon"></p>
+									<p><input type="submit" value="Apply"></p>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+				<% }else{ %>
+					<div class="d-flex align-items-center justify-content-center">
+						<h2 class="text-danger">Oops..! Your cart is empty</h2>
+					</div>
+					<div class="d-flex align-items-center justify-content-center mt-5">
+						<a class="btn btn-success" href="/shop">Shop now</a>
+					</div>
+					<% } %>
 		</div>
 	</div>
+
+
 	<!-- end cart -->
 
 	<!-- logo carousel -->
@@ -153,7 +182,8 @@
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box about-widget">
 						<h2 class="widget-title">About us</h2>
-						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
+						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium
+							doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6">
@@ -192,13 +222,14 @@
 		</div>
 	</div>
 	<!-- end footer -->
-	
+
 	<!-- copyright -->
 	<div class="copyright">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>,  All Rights Reserved.<br>
+					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
+						Reserved.<br>
 						Distributed By - <a href="https://themewagon.com/">Themewagon</a>
 					</p>
 				</div>
@@ -217,7 +248,7 @@
 		</div>
 	</div>
 	<!-- end copyright -->
-	
+
 	<!-- jquery -->
 	<script src="./assets/js/jquery-1.11.3.min.js"></script>
 	<!-- bootstrap -->
@@ -239,44 +270,58 @@
 	<!-- main js -->
 	<script src="./assets/js/main.js"></script>
 
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 	<script>
-		function removeProduct(cartId , productId) {
+		function removeProduct(cartId, productId) {
 			$.ajax({
-				url:"/removeProduct",
+				url: "/removeProduct",
 				data: {
 					cart: cartId,
-					product : productId
+					product: productId
 				},
 				method: "post",
-				success:()=>{
+				success: () => {
 					location.reload();
 				}
 			})
 		}
 
 
-		function changeQuantity(cartId,productId,count){
+		function changeQuantity(cartId, productId, count) {
 			let quantity = parseInt(document.getElementById(productId).innerHTML);
 			//let price = parseInt(product.productDetail.price)
 			console.log(price);
 			$.ajax({
-				url:"/changeQuantity",
-				data:{
-					cart : cartId,
-					product:productId,
-					count:count,
-					
+				url: "/changeQuantity",
+				data: {
+					cart: cartId,
+					product: productId,
+					count: count,
+					quantity: quantity
+
 				},
-				method:"post",
-				success:(response)=>{
-					//document.getElementById(productId).innerHTML = quantity + count;
-					//document.getElementById(price).innerHTML = quantity * price;
+				method: "post",
+				success: (response) => {
+					// document.getElementById(productId).innerHTML = quantity + count;
+					// document.getElementById(price).innerHTML = quantity * price;
+					if(response.status){
+						location.reload();
+					}
 					
-					location.reload();
+					if (response.quantity) {
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							text: "Minimum One kg required!",
+						});
+					}
+					
 				}
 			})
 		}
 	</script>
 
-</body>
-</html>
+	</body>
+
+	</html>
