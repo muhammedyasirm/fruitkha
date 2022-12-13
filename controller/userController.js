@@ -354,6 +354,63 @@ const removeProduct = async(req,res)=>{
         res.json({status : true});
 }
 
+const totalAmount = async(req,res) =>{
+    const session = req.session.consumer;
+    const userData = await users.findOne({Email:session});
+    if(req.session.consumer){
+        if(session){
+            customer = true;
+        } else {
+            customer = false;
+        }
+    }
+    const productData = await cart.aggregate([
+        {
+            $match: { userId: userData.id},
+        },
+        {
+            $unwind:"$product",
+        },
+        {
+            $project:{
+                productItem: "$product.productId",
+                productQuantity:"$product.quantity"
+            },
+        },
+        {
+            $lookup:{
+                from:"product",
+                localField:"productItem",
+                foreignField:"_id",
+                as:"productDetail"
+            },
+        },
+        {
+            $project:{
+                productItem : 1,
+                productQuantity : 1,
+                productDetail : {$arrayElemAt : ["$productDetail",0]},
+            },
+        },
+        {
+            $addFields:{
+                productPrice: {
+                    $multiply: ["$productQuantity","productDetail.price"],
+                },
+            },
+        },
+        {
+            $group:{
+                _id:userId,
+                total:{
+                    $sum:{ $multiply:["productQuantity","productDetail.price"]},
+                }
+            }
+        }
+    ]);
+    res.json({status:true,productData});
+}
+
 const changeQuantity = async(req,res)=>{
     const data = req.body;
     const objId = mongoose.Types.ObjectId(data.product);
@@ -395,4 +452,4 @@ const changeQuantity = async(req,res)=>{
 
 module.exports = {  getHomeN,getUserLogin,getRegister,postRegister,postLogin,
                     getLogout,getShop,getHome,getProductView,getCategory,getOtp,
-                    postOtp,getCart,viewCart,removeProduct,changeQuantity};
+                    postOtp,getCart,viewCart,removeProduct,changeQuantity,totalAmount};

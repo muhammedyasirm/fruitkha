@@ -44,7 +44,9 @@ userRoute.get('/viewCart',userController.viewCart);
 
 userRoute.post('/removeProduct',userController.removeProduct);
 
-userRoute.post('/changeQuantity',userController.changeQuantity);
+userRoute.post('/changeQuantity',
+userController.changeQuantity,
+userController.totalAmount);
 
 
 

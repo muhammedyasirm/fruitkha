@@ -46,7 +46,7 @@
 											</td>
 
 											<td class="product-price">
-												<p id="price">
+												<p id="price<%= product.productDetail._id %>">
 													<%=product.productDetail.price%>
 												</p>
 											</td>
@@ -72,7 +72,7 @@
 									 	<i class="lnr lnr-chevron-down"></i></button> -->
 												</td>
 											</div>
-											<td class="product-total" id="total<%=product._id%>">₹
+											<td class="product-total" id="total<%= product.productDetail._id %>">₹
 												<%=product.productQuantity * product.productDetail.price%>
 											</td>
 											<!-- <td class="product-total">1</td> -->
@@ -289,9 +289,6 @@
 
 
 		function changeQuantity(cartId, productId, count) {
-			let quantity = parseInt(document.getElementById(productId).innerHTML);
-			//let price = parseInt(product.productDetail.price)
-			console.log(price);
 			$.ajax({
 				url: "/changeQuantity",
 				data: {
@@ -303,10 +300,26 @@
 				},
 				method: "post",
 				success: (response) => {
-					// document.getElementById(productId).innerHTML = quantity + count;
-					// document.getElementById(price).innerHTML = quantity * price;
+					 document.getElementById(productId).innerHTML = quantity + count;
+					
 					if(response.status){
-						location.reload();
+						// location.reload();
+						let quantity = $("#" + productId).html();
+						if(count == 1){
+							quantity = parseInt(quantity) + 1;
+							$("#" + productId).html(quantity );
+						}else if(count == -1){
+							quantity = parseInt(quantity) - 1;
+							$("#" + productId).html(quantity );
+						}
+
+						let item_price = $("#price"+ productId).html();
+						quantity = $("#" + productId).html();
+						let total_of_item = item_price*quantity
+						 $("#total" + productId).html(total_of_item);
+
+						let sub_total = 
+
 					}
 					
 					if (response.quantity) {
