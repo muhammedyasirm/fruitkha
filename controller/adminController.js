@@ -6,6 +6,12 @@ const mongoose = require('mongoose');
 
 const adminRoute = require('../userRoute/adminRoute');
 
+const order = require('../model/order');
+
+const moment = require('moment');
+moment().format();
+
+
 const session = require('express-session');
 const userModel = require('../model/userModel');
 const products = require('../model/productModel');
@@ -14,6 +20,7 @@ const { find } = require('../model/userModel');
 const multer = require('multer')
 const { cloudinary } = require('../cloudinary');
 const cart = require('../model/cartModel');
+const { response } = require('../userRoute/adminRoute');
 
 const getDashboard = (req,res)=>{
     let session = req.session.admin;
@@ -243,6 +250,107 @@ const deleteCategory = async(req,res)=>{
     res.redirect('/category');
 }
 
+const getOrders = async(req,res)=>{
+    order.aggregate([
+        {
+            $lookup:{
+                from:'products',
+                localField:'orderItems.productId',
+                foreignField:'_id',
+                as:'product',
+            }
+        },
+        {
+            $lookup:{
+                from:'user',
+                localField:'userId',
+                foreignField:'_id',
+                as:'users'
+            }
+        },
+        {
+            $sort:{
+                createdAt:-1
+            }
+        }
+    ]).then((orderDetails)=>{
+        res.render('admin/order',{orderDetails});
+    })
+}
+
+const orderDetails = async(req,res)=>{
+    try{
+        const id = req.params.id;
+        const objId = mongoose.Types.ObjectId(id);
+        const productData = await order.aggregate([
+            {
+                $match:{_id:objId}
+            },
+            {
+                $unwind:"$orderItems"
+            },
+            {
+                $project:{
+                    productItem:"$orderItems.productId",
+                    productQuantity:"$orderItems.quantity",
+                    address:1,
+                    name:1,
+                    phonenumber:1
+                }
+            },
+            {
+                $lookup:{
+                    from:"products",
+                    localField:"productItem",
+                    foreignField:"_id",
+                    as:"productDetail"
+                    }
+            },
+            {
+                $project:{
+                    productItem:1,
+                    productQuantity:1,
+                    address:1,
+                    name:1,
+                    phonenumber:1,
+                    productDetail:{$arrayElemAt:["$productDetail",0]}
+                }
+            },
+            {
+                $lookup:{
+                    from:'categories',
+                    localField:'productDetail.category',
+                    foreignField:'_id',
+                    as:'category_name'
+                }
+            },
+            {
+                $unwind:'$category_name'
+            }
+        ]);
+        console.log("Product details order   = ",productData);
+        res.render('admin/orderDetails',{productData});
+    } catch(error){
+        console.log(error);
+    }
+}
+
+const orderStatusChange = async(req,res)=>{
+    try {
+        const id = req.params.id;
+        const data = req.body;
+        await order.updateOne({_id:id},
+            {
+                $set:{
+                    orderStatus:data.orderStatus,
+                    paymentStatus:data.paymentStatus
+                }
+            })
+            res.redirect('/order');
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 
@@ -258,4 +366,4 @@ const deleteCategory = async(req,res)=>{
 module.exports = {  getAdminLogin,postAdminLogin,getDashboard,getUserDetails,blockUser,
                     unblockUser,getLogout,addproducts,postAddProduct,getProductDetails,
                     editProduct,postEditProduct,getDelete,getCategory,addCategory,editCategory,
-                    deleteCategory,getRestore}
+                    deleteCategory,getRestore,getOrders,orderDetails,orderStatusChange}

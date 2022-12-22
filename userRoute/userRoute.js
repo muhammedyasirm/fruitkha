@@ -22,8 +22,6 @@ userRoute.post('/postRegister',userController.postRegister);
 
 userRoute.post('/postLogin',userController.postLogin);
 
-//userRoute.post('/Logout',userController.postLogout);
-
 userRoute.get('/userLogout',userController.getLogout);
 
 userRoute.get('/shop',userController.getShop);
@@ -44,9 +42,41 @@ userRoute.get('/viewCart',userController.viewCart);
 
 userRoute.post('/removeProduct',userController.removeProduct);
 
-userRoute.post('/changeQuantity',
-userController.changeQuantity,
-userController.totalAmount);
+userRoute.post('/changeQuantity',userController.changeQuantity,userController.totalAmount);
+
+userRoute.get('/checkout',userController.getCheckOutPage);
+
+userRoute.post('/addNewAddress',userController.addNewAddress);
+
+userRoute.post('/placeOrder',userController.placeOrder);
+
+userRoute.get('/orderConfirmation',userController.orderConfirmation);
+
+userRoute.get('/paymentFail',userController.paymentFail);
+
+userRoute.get('/addToWishlist/:id',userController.addToWishlist);
+
+userRoute.get('/viewWishlist',userController.viewWishlist);
+
+userRoute.post('/removeFromWishlist',userController.removeFromWishlist);
+
+userRoute.get('/orders',userController.getOrders);
+
+userRoute.get('/cancelOrder/:id',userController.cancelOrder);
+
+userRoute.get('/viewOrderProduct/:id',userController.viewOrderProducts);
+
+userRoute.get('/userProfile',userController.userProfile);
+
+userRoute.get('/editAccount',userController.editAccount);
+
+userRoute.post('/postEditAccount',userController.postEditAccount);
+
+userRoute.get('/changePassword',userController.changePassword);
+
+userRoute.post('/postChangePassword',userController.changePasswordPost);
+
+userRoute.post('/verifyPayment',userController.verifyPayment);
 
 
 

@@ -15,6 +15,10 @@ const cookieParser = require('cookie-parser');
 const userRoute = require('./userRoute/userRoute');
 const adminRoute = require('./userRoute/adminRoute');
 
+const dotenv = require('dotenv');
+
+dotenv.config()
+
 app.set("views");
 //app.use(express.static("views"));
 app.set("view engine","ejs");

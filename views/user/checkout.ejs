@@ -1,0 +1,424 @@
+<%- include('../partials/userHeader')-%>
+	<!-- end search arewa -->
+
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>Fresh and Organic</p>
+						<h1>Check Out Product</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+
+	<!-- check out section -->
+	<div class="checkout-section mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 order-md-1">
+					<section>
+						<div class="container">
+							<form id="placeOrder">
+
+								<label class="col-xs-3 control-label">Select Shipping Address</label>
+								<select class="form-select form-select-lg" name="address" aria-label="GFG Small Select"
+									style="width: 300px;">
+									
+									<% userData.addressDetails.forEach((address)=>{ %>
+										<option name="address">
+											<%=address.apartment %>,<%=address.postoffice %>,<%=address.landmark %>,<%=address.area %>,<%=address.district %>,<%=address.state %>
+											</option>
+										<% }) %>
+								</select>
+
+								<div class="d-block my-3">
+									<div class="custom-control custom-radio">
+										<input id="credit" name="paymentMethod" type="radio" value="COD"
+											class="custom-control-input" checked required />
+										<label class="custom-control-label" for="credit">COD</label>
+									</div>
+
+									<div class="custom-control custom-radio">
+										<input id="debit" name="paymentMethod" type="radio" value="Online"
+											class="custom-control-input" required />
+										<label class="custom-control-label" for="debit">Online</label>
+									</div>
+
+									<button type="submit" value="submit" class="btn btn-secondary mt-5">
+										Place order
+									</button>
+
+								</div>
+							</form>
+
+
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-secondary" data-toggle="modal"
+								data-target="#exampleModal">
+								Add address
+							</button>
+
+							<!-- Modal -->
+							<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+								aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Add New Address</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+                                              
+
+
+											<form action="/addNewAddress" method="post">
+												<div class="modal-body">
+													<div class="mb-3">
+														<label for="recipient-name"
+															class="col-form-label">Housename:</label>
+														<input required type="text" class="form-control" id="housename"
+															name="housename" />
+														<p id="houseError" style="color: red"></p>
+													</div>
+													<div class="mb-3">
+														<label for="recipient-name" class="col-form-label">Area:</label>
+														<input required type="text" class="form-control" id="area"
+															name="area" />
+														<p id="areaError" style="color: red"></p>
+													</div>
+													<div class="mb-3">
+														<label for="recipient-name" class="col-form-label">Landmark:</label>
+														<input required type="text" class="form-control" id="landmark"
+															name="landmark" />
+														<p id="landmarkError" style="color: red"></p>
+													</div>
+													<div class="mb-3">
+														<div class="row">
+															<div class="col-md-6 mb-3">
+																<label for="firstName">District</label>
+																<input required type="text" class="form-control"
+																	id="district" name="district" />
+																<p id="stateError" style="color: red"></p>
+															</div>
+															<div class="col-md-6 mb-3">
+																<label for="lastName">State</label>
+																<input required type="text" class="form-control" id="state"
+																	name="state" />
+																<p id="pincodeError" style="color: red"></p>
+															</div>
+														</div>
+													</div>
+													<div class="mb-3">
+														<div class="row">
+															<div class="col-md-6 mb-3">
+																<label for="firstName">Post office</label>
+																<input required type="text" class="form-control"
+																	id="postoffice" name="postoffice" />
+																<p id="stateError" style="color: red"></p>
+															</div>
+															<div class="col-md-6 mb-3">
+																<label for="lastName">Pincode</label>
+																<input required type="text" class="form-control" id="pin"
+																	name="pin" />
+																<p id="pincodeError" style="color: red"></p>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+														Close
+													</button>
+													<button type="submit" value="submit" class="btn btn-primary">
+														Add
+													</button>
+												</div>
+											</form>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</section>
+				</div>
+
+				<div class="col-lg-4">
+					<div class="order-details-wrap">
+						<table class="order-details">
+							<thead>
+								<tr>
+									<th>Your order Details</th>
+									<th>price</th>
+								</tr>
+							</thead>
+							<tbody class="order-details-body">
+								<% productData.forEach((product)=>{ %>
+									<tr>
+										<td>
+											<%= product.productDetail.product_name %> (<%= product.productQuantity%>kg)
+										</td>
+
+										<% let price=product.productDetail.price %>
+											<% let quantity=product.productQuantity %>
+												<% let total=price*quantity %>
+
+
+													<td>
+														<%=total %>
+													</td>
+
+									</tr>
+									<% }) %>
+
+									<tr>
+										<td>
+											Shipping Charge
+										</td>
+										<td>
+											<strong>
+												<%=shipping %>
+											</strong>
+										</td>
+
+									</tr>
+
+										<tr>
+											<td>
+												<p><strong>Total</strong></p>
+											</td>
+											<td>
+												<strong>
+													<%=sum+shipping %>
+												</strong>
+											</td>
+
+										</tr>
+							</tbody>
+
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end check out section -->
+
+	<!-- logo carousel -->
+	<div class="logo-carousel-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="logo-carousel-inner">
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/1.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/2.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/3.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/4.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/5.png" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end logo carousel -->
+
+	<!-- footer -->
+	<div class="footer-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box about-widget">
+						<h2 class="widget-title">About us</h2>
+						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium
+							doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box get-in-touch">
+						<h2 class="widget-title">Get in Touch</h2>
+						<ul>
+							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
+							<li>support@fruitkha.com</li>
+							<li>+00 111 222 3333</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box pages">
+						<h2 class="widget-title">Pages</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="services.html">Shop</a></li>
+							<li><a href="news.html">News</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box subscribe">
+						<h2 class="widget-title">Subscribe</h2>
+						<p>Subscribe to our mailing list to get the latest updates.</p>
+						<form action="index.html">
+							<input type="email" placeholder="Email">
+							<button type="submit"><i class="fas fa-paper-plane"></i></button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end footer -->
+
+	<!-- copyright -->
+	<div class="copyright">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-md-12">
+					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
+						Reserved.<br>
+						Distributed By - <a href="https://themewagon.com/">Themewagon</a>
+					</p>
+				</div>
+				<div class="col-lg-6 text-right col-md-12">
+					<div class="social-icons">
+						<ul>
+							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end copyright -->
+
+	<!-- jquery -->
+	<script src="assets/js/jquery-1.11.3.min.js"></script>
+	<!-- bootstrap -->
+	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<!-- count down -->
+	<script src="assets/js/jquery.countdown.js"></script>
+	<!-- isotope -->
+	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<!-- waypoints -->
+	<script src="assets/js/waypoints.js"></script>
+	<!-- owl carousel -->
+	<script src="assets/js/owl.carousel.min.js"></script>
+	<!-- magnific popup -->
+	<script src="assets/js/jquery.magnific-popup.min.js"></script>
+	<!-- mean menu -->
+	<script src="assets/js/jquery.meanmenu.min.js"></script>
+	<!-- sticker js -->
+	<script src="assets/js/sticker.js"></script>
+	<!-- main js -->
+	<script src="assets/js/main.js"></script>
+
+	<script>
+
+		$("#placeOrder").submit((e)=>{
+			e.preventDefault();
+			$.ajax({
+				url:'/placeOrder',
+				method:'post',
+				data:$('#placeOrder').serialize(),
+				success:(response)=>{
+					if(response.success){
+						location.href = "/orderConfirmation";
+					}else{
+						razorPay(response);
+					}
+				}
+			})
+		})
+	</script>
+	<script>
+			function razorPay(order) {
+		var options = {
+			"key": "rzp_test_4fGKqxVpJTRSh2", // Enter the Key ID generated from the Dashboard
+			"amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+			"currency": "INR",
+			"name": "Frutica",
+			"description": "Test Transaction",
+			"image": "/assets/img/logo.png",
+			"order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+			"handler": function (response) {
+				// alert(response.razorpay_payment_id);
+				// alert(response.razorpay_order_id);
+				// alert(response.razorpay_signature)
+				verifyPayment(response, order);
+			},
+			"prefill": {
+				"name": "Fruitikha",
+				"email": "fruitikha@gmail.com",
+				"contact": "9999999999"
+			},
+			"notes": {
+				"address": "Razorpay Corporate Office"
+			},
+			"theme": {
+				"color": "#3399cc"
+			}
+		};
+		var rzp1 = new Razorpay(options);
+		rzp1.on('payment.failed', function (response) {
+			// alert(response.error.code);
+			// alert(response.error.description);
+			// alert(response.error.source);
+			// alert(response.error.step);
+			// alert(response.error.reason);
+			// alert(response.error.metadata.order_id);
+			// alert(response.error.metadata.payment_id);
+			location.href = "/paymentFail";
+		});
+		rzp1.open();
+
+	}
+	function verifyPayment(payment, order) {
+
+		$.ajax({
+			url: "/verifyPayment",
+			data: {
+				payment,
+				order,
+			},
+			method: "post",
+			success: (response) => {
+				if (response.success) {
+					location.href = "/orderConfirmation";
+				} else {
+					location.href = "/paymentFail";
+				}
+			},
+		});
+	}
+	</script>
+
+
+
+	</body>
+
+	</html>

@@ -46,7 +46,7 @@
 											</td>
 
 											<td class="product-price">
-												<p id="price<%= product.productDetail._id %>">
+												<p id="price<%= product._id%>">
 													<%=product.productDetail.price%>
 												</p>
 											</td>
@@ -55,25 +55,19 @@
 												<td>
 													<div class="container d-flex">
 														<button class="cart-item-count  mr-3"
-															onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
+															onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1,'<%=product.productDetail.product_name%>','<%=countInCart%>','<%=product.productPrice%>')">-</button>
 														<p id="<%= product.productDetail._id %>" min="0"
 															name="quantity">
 															<%= product.productQuantity%>
 														</p>
 
 														<button class="cart-item-count ml-3 mr-3"
-															onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)">+</button>
+															onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1,'<%=product.productDetail.product_name%>','<%=countInCart%>','<%=product.productPrice%>')">+</button>
 													</div>
-
-													<!-- <button onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>','1')"class="increase items-count"type="button">
-										<i class="lnr lnr-chevron-up"></i></button>
-										<p id="<%= product.productDetail._id %>" min="0" name="quantity"><%= product.productQuantity%></p>
-									    <button onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>','-1')"class="reduced items-count"type="button">
-									 	<i class="lnr lnr-chevron-down"></i></button> -->
 												</td>
 											</div>
-											<td class="product-total" id="total<%= product.productDetail._id %>">₹
-												<%=product.productQuantity * product.productDetail.price%>
+											<td class="product-total">
+												<p id="<%=product.productDetail.product_name%>">₹<%=product.productPrice%></p>
 											</td>
 											<!-- <td class="product-total">1</td> -->
 										</tr>
@@ -94,31 +88,32 @@
 								</thead>
 								<tbody>
 									<tr class="total-data">
-										<td><strong>Subtotal: </strong></td>
+										<td><strong>Subtotal: </strong>
+										</td> 
 										<td>
-											<%=sum%>
+											<p id="sum"><%=sum %></p>
 										</td>
 									</tr>
-									<tr class="total-data">
+									<!-- <tr class="total-data">
 										<td><strong>Shipping: </strong></td>
-										<td>₹<%=shipping%>
+										<td>₹
 										</td>
 
-									</tr>
+									</tr> -->
 									<tr class="total-data">
 										<td><strong>Coupon Applied:</strong></td>
 										<td>₹0</td>
 									</tr>
 									<tr class="total-data">
 										<td><strong>Total: </strong></td>
-										<td>₹<%=sum + shipping%>
+										<td><p id="netamount">₹<%=sum%></p>
 										</td>
 									</tr>
 								</tbody>
 							</table>
 							<div class="cart-buttons">
 								<a href="/shop" class="boxed-btn">Continue Shopping</a>
-								<a href="checkout.html" class="boxed-btn black">Check Out</a>
+								<a href="/checkout" class="boxed-btn black">Check Out</a>
 							</div>
 						</div>
 
@@ -137,8 +132,8 @@
 					<div class="d-flex align-items-center justify-content-center">
 						<h2 class="text-danger">Oops..! Your cart is empty</h2>
 					</div>
-					<div class="d-flex align-items-center justify-content-center mt-5">
-						<a class="btn btn-success" href="/shop">Shop now</a>
+					<div class="cart-buttons text-center">
+						<a href="/shop" class="boxed-btn">Continue Shopping</a>
 					</div>
 					<% } %>
 		</div>
@@ -288,37 +283,29 @@
 		}
 
 
-		function changeQuantity(cartId, productId, count) {
+		function changeQuantity(cartId, productId, count ,productname,countInCart,productPrice) {
+			let quantity = parseInt(document.getElementById(productId).innerHTML);
 			$.ajax({
 				url: "/changeQuantity",
 				data: {
 					cart: cartId,
 					product: productId,
 					count: count,
-					quantity: quantity
+					quantity: quantity,
 
 				},
 				method: "post",
 				success: (response) => {
-					 document.getElementById(productId).innerHTML = quantity + count;
+					 //document.getElementById(productId).innerHTML = quantity + count;
 					
 					if(response.status){
-						// location.reload();
-						let quantity = $("#" + productId).html();
-						if(count == 1){
-							quantity = parseInt(quantity) + 1;
-							$("#" + productId).html(quantity );
-						}else if(count == -1){
-							quantity = parseInt(quantity) - 1;
-							$("#" + productId).html(quantity );
-						}
-
-						let item_price = $("#price"+ productId).html();
-						quantity = $("#" + productId).html();
-						let total_of_item = item_price*quantity
-						 $("#total" + productId).html(total_of_item);
-
-						let sub_total = 
+						
+						document.getElementById(productId).innerHTML = quantity+count;
+						document.getElementById("sum").innerText = "₹"+response.productData.total;
+						// for(let i = 0;i<response.countInCart;i++){
+						document.getElementById(productname).innerText = "₹"+response.productData.product[0].price;
+						// }
+						document.getElementById("netamount").innerText = "₹"+response.productData.total;
 
 					}
 					
@@ -327,6 +314,13 @@
 							icon: "error",
 							title: "Oops...",
 							text: "Minimum One kg required!",
+						});
+					}
+					if (response.stock) {
+        				Swal.fire({
+						title: "Out of stock!",
+						icon: "error",
+						confirmButtonText: "continue",
 						});
 					}
 					

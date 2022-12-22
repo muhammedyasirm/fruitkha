@@ -10,6 +10,7 @@
 	<title>Fruitkha - Slider Version</title>
 
 	<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
@@ -34,6 +35,7 @@
 	<link rel="stylesheet" href="/assets/css/main.css">
 	<!-- responsive -->
 	<link rel="stylesheet" href="/assets/css/responsive.css">
+	
 
 </head>
 <body>
@@ -72,21 +74,22 @@
 									
 								</li>
 								<li><a href="contact.html">Contact</a></li>
-								<li><a href="/shop">Shop</a>
-									
-								</li>
-                                   
-								
-                                    <% if (customer) { %>
-                                    <li><a href="/userLogout">Logout</a>
-                                    <%}
-                                    else{%>
-                                       <li> <a href="/userLogin">Login</a>
-                                    <%} %>
-                                </li>
+								<li><a href="/shop">Shop</a></li>
+								<% if (customer) { %>
+									<li><a href="/userProfile">My Profile</a>
+										<ul class="sub-menu">
+											<li><a href="/userProfile">My Account</a></li>
+											<li><a href="/orders">My Orders</a></li>
+											<li><a href="/userLogout">Logout</a></li>
+										</ul>
+										
+										<%}else{%>
+											 <li><a href="/userLogin">Login</a></li>
+												<%} %>
 									<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="/viewCart"><i class="fas fa-shopping-cart"></i></a>
+										<a class="wishlist" href="/viewWishlist"><i class="fas fa-solid fa-heart"></i></a>
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>

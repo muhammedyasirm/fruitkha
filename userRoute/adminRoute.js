@@ -53,6 +53,12 @@ adminRoute.post('/editCategory/:id',adminController.editCategory);
  
 adminRoute.get('/deletecategory/:id',adminController.deleteCategory); 
 
+adminRoute.get('/order',adminController.getOrders);
+
+adminRoute.get('/orderDetails/:id',adminController.orderDetails);
+
+adminRoute.post('/orderStatusChange/:id',adminController.orderStatusChange);
+
 
 
 

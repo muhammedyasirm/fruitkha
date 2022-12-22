@@ -43,7 +43,12 @@
 						</div>
 						<h3><%=product.product_name%></h3>
 						<p class="product-price"><span>Per Kg</span>₹ <%=product.price%> </p>
-						<a href="/addToCart/<%=product._id%>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						<% if (customer) { %>
+							<a href="/addToCart/<%=product._id%>" class="cart-btn"><i class="fas fa-shopping-cart"></i>Add to Cart</a>
+							<a onclick="addToWishlist('<%=product._id%>')" class="cart-btn"><i class="fas fa-solid fa-heart"></i>Add to Wishlist</a>
+							<% } else {%>
+								<a href="/userLogin" class="cart-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+							<% } %>
 					</div>
 				</div>
 				<%})%>
@@ -186,6 +191,34 @@
 	<script src="http://localhost:4000/assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="http://localhost:4000/assets/js/main.js"></script>
+
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		function addToWishlist(proId){
+			$.ajax({
+				url:"/addToWishlist/"+proId,
+				method:"get",
+				success:(response)=>{
+					if(response.status){
+						Swal.fire({
+							title:"Added to Wishlist",
+							icon:"success",
+							confirmButtonText:"Continue"
+						});
+					}
+					if(response.productExist){
+						console.log("Swal not working");
+						Swal.fire({
+							title:"Already Exist in Wishlist",
+							icon:"error",
+							confirmButtonText:"Continue"
+						})
+					}
+				}
+			})
+		}
+	</script>
 
 </body>
 </html>

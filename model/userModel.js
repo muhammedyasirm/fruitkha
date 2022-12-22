@@ -21,6 +21,31 @@ const mongoose = require('mongoose');
         trim: true,
         unique: true
     },
+    addressDetails: [
+        {
+            apartment : {
+                type : String
+            },
+            area : {
+                type : String
+            },
+            landmark: {
+                type:String
+            },
+            district: {
+                type:String
+            },
+            postoffice:{
+                type:String
+            },
+            state:{
+                type:String
+            },
+            pin:{
+                type:String
+            }
+        }
+    ],
     Password: {
         type: String,
         required: true,

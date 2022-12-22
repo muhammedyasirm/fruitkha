@@ -38,15 +38,15 @@
 							<div class="product p-4">
 								<div class="d-flex justify-content-between align-items-center">
 								</div>
-								<div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">Good Fruits For Good Health</span>
-									<h3 class="text-uppercase"><%=productSingle.product_name%></h3>
-									<div class="price d-flex flex-row align-items-center"> <span class="act-price"><h5>₹ <%=productSingle.price%></h5></span>
+								<div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand mb-5 ">Good Fruits For Good Health</span>
+									<h3 class="text-uppercase mt-3"><%=productSingle.product_name%></h3>
+									<div class="price d-flex flex-row align-items-center mt-3"> <span class="act-price mt-3"><h5>₹ <%=productSingle.price%></h5></span>
 									</div>
 								</div>
-								<p class="about"><%=productSingle.description%></p>
+								<p class="about mt-3"><%=productSingle.description%></p>
 								<div class="cart mt-4 align-items-center"> 
 									<% if (customer) { %>
-										<a href="/addToCart/<%=productSingle._id%>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+										<a href="/addToCart/<%=productSingle._id%>" class="cart-btn mt-3"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 										<% } else {%>
 											<a href="/userLogin" class="cart-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
 										<% } %>
