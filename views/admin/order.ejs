@@ -71,6 +71,7 @@
                                                         <label for="recipient-name" name="orderStatus"
                                                             class="col-form-label"> Order Status</label>
                                                         <select class="form-select" name="orderStatus" aria-label="Default select example" id="">
+                                                            <% if(order) %> 
                                                             
                                                             <option selected><%= order.orderStatus %></option>
                                                             <option value="Pending" name="orderStatus">Pending</option>

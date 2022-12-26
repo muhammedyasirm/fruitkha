@@ -56,15 +56,27 @@
                                                     <%=order.deliveryDate%>
                         </div>
                         <div class="col-md-3 justify-content-center d-flex flex-row align-items-center">
-                            <a href="/viewOrderProduct/<%=order._id%> "><button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal"
+                            <a href="/viewOrderProduct/<%=order._id%> "><button type="button" class="btn btn-dark btn-sm mr-1" data-bs-toggle="modal"
                                     data-bs-target="#model- data.order_id ">
                                     View Products
-                                </button></a>
+                                </button></a> 
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                            <%if(order.orderStatus==="Cancelled" ){ %>
+                            <button hidden type="button" class="btn btn-warning" data-toggle="modal"
                                 data-target="#exampleModal-<%= order._id %>">
                                 Cancel
                             </button>
+                            <% }else if(order.orderStatus==="Delivered" ){ %>
+                                 
+                                    <a href="#"><button type="button" class="btn btn-dark btn-sm" >
+                                        Return
+                                    </button></a>
+                                    <% } else{ %> 
+                                <button type="button" class="btn btn-warning" data-toggle="modal"
+                                data-target="#exampleModal-<%= order._id %>">
+                                Cancel
+                            </button>
+                                <% } %>  
                             </div>
 
                             <!-- Modal -->

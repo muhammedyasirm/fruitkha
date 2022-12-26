@@ -78,6 +78,12 @@ userRoute.post('/postChangePassword',userController.changePasswordPost);
 
 userRoute.post('/verifyPayment',userController.verifyPayment);
 
+userRoute.get('/savedAddress',userController.getSavedAddress);
+
+userRoute.post('/editAddress/:id',userController.postEditAddress);
+
+userRoute.get('/deleteAddress/:id',userController.deleteAddress)
+
 
 
 

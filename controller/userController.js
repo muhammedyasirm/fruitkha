@@ -518,13 +518,13 @@ const getCheckOutPage = async(req,res) => {
         },0);
 
         console.log("summmmm ==  ",sum);
-        if(sum<1000){
-            let shipping = 75;
-            res.render('user/checkout',{productData,sum,countInCart,userData,shipping});
-        } else{
-            shipping = 0;
-            res.render('user/checkout',{productData,sum,countInCart,userData,shipping});
-        }
+        // if(sum<1000){
+        //     let shipping = 75;
+            res.render('user/checkout',{productData,sum,countInCart,userData});
+        // } else{
+        //     shipping = 0;
+        //     res.render('user/checkout',{productData,sum,countInCart,userData,shipping});
+        // }
 
         console.log("CheckOut ProductData   =   ",productData);
 
@@ -895,7 +895,7 @@ const userProfile = async(req,res)=>{
             const session = req.session.consumer;
             const userData = await user.findOne({Email:session});
             res.render('user/userProfile',{userData}) 
-            console.log("UserProfile user data  =  ",userData);
+           // console.log("UserProfile user data  =  ",userData);
         } catch (error) {
             console.log(error);
         }
@@ -1008,6 +1008,71 @@ const verifyPayment = async (req, res) => {
     }
   }
 
+  const getSavedAddress = async(req,res)=>{
+    if(req.session.consumer){
+        try {
+            const session = req.session.consumer;
+            const userData = await user.findOne({Email:session})
+            // console.log("userData Saved Address Length = ",userData.addressDetails.length);
+            // console.log("userData Saved Address = ",userData.addressDetails);
+            res.render('user/savedAddress',{userData});
+        } catch (error) {
+            
+        }
+    }
+  }
+
+  const postEditAddress = async(req,res)=>{
+    if(req.session.consumer){
+        
+        try {
+            const session = req.session.consumer;
+            const userId = await user.findOne({Email:session});
+            const AddressId = req.params.id;
+            const housename = req.body.housename;
+            const area = req.body.area;
+            const landmark = req.body.landmark;
+            const district = req.body.district;
+            const state = req.body.state;
+            const postoffice = req.body.postoffice;
+            const pin = req.body.pin;
+
+            const updatedAddress = {
+             apartment:housename,area:area,landmark:landmark,district:district,state:state,pin:pin,postoffice:postoffice
+            }
+
+            await user.findOneAndUpdate({_id:userId, "addressDetails._id":AddressId },{$set:{"addressDetails.$":updatedAddress}})
+            res.redirect('/userProfile');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+  }
+
+  const deleteAddress = async(req,res)=>{
+    if(req.session.consumer){
+        try {
+            const session = req.session.consumer;
+            const userId = await user.findOne({Email:session});
+            const addressId = req.params.id;
+            console.log("Delete Address Id = ",addressId);
+            console.log("Delete User Id = ",userId);
+            console.log();
+            await user.updateOne(
+                {
+                _id:userId,
+                },
+                {
+                    $pull:{addressDetails:{_id:addressId}}
+                }
+            )
+            res.redirect('/savedAddress')
+        } catch (error) {
+            console.log(error);
+        }
+    }
+  }
+
 
 
 
@@ -1033,4 +1098,5 @@ module.exports = {  getHomeN,getUserLogin,getRegister,postRegister,postLogin,
                     getCheckOutPage,addNewAddress,placeOrder,orderConfirmation,
                     addToWishlist,viewWishlist,removeFromWishlist,getOrders,cancelOrder,
                     viewOrderProducts,userProfile,editAccount,postEditAccount,changePassword,
-                    changePasswordPost,verifyPayment,paymentFail};
+                    changePasswordPost,verifyPayment,paymentFail,getSavedAddress,postEditAddress,
+                    deleteAddress};
