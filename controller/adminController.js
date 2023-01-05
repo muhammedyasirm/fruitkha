@@ -8,26 +8,193 @@ const adminRoute = require('../userRoute/adminRoute');
 
 const order = require('../model/order');
 
+const coupon = require('../model/coupen');
+
 const moment = require('moment');
 moment().format();
+require('fs');
+const path = require('path');
+const excelJs = require('exceljs')
+
 
 
 const session = require('express-session');
 const userModel = require('../model/userModel');
 const products = require('../model/productModel');
 const categories = require('../model/categoryModel');
-const { find } = require('../model/userModel');
+const { find, aggregate } = require('../model/userModel');
 const multer = require('multer')
 const { cloudinary } = require('../cloudinary');
 const cart = require('../model/cartModel');
 const { response } = require('../userRoute/adminRoute');
 
-const getDashboard = (req,res)=>{
+const getDashboard = async(req,res)=>{
     let session = req.session.admin;
     if(session){
-        res.render('admin/dashboard');
+        try {
+            const orderData = await order.find({orderStatus:{$ne:"Cancelled"}});
+            const totalRev = orderData.reduce((accumulator,object)=>{
+                return(accumulator+=object.discountAmount);
+            },0);
+
+            const todayOrder = await order.find({orderStatus:{$ne:"Cancelled"},
+        orderDate:moment().format("MMM Do YY")});
+
+        const todayRev = todayOrder.reduce((accumulator,object)=>{
+            return (accumulator+=object.discountAmount);
+        },0);
+
+        const start = moment().startOf("month");
+        const end = moment().endOf("month");
+        const monthOrder = await order.find({
+            orderStatus:{$ne:"Cancelled"},
+            createdAt:{
+                $gte:start,
+                $lte:end
+            }
+        });
+        console.log("Dashboard Month order  =  ",monthOrder);
+        const monthRev = monthOrder.reduce((accumulator,object)=>{
+            return(accumulator+=object.discountAmount)
+        },0);
+        console.log("Dashboard Month Revenue  =  ",monthRev);
+
+        const placed = await order.find({orderStatus:"Placed"});
+        const shipped = await order.find({orderStatus:"Shipped"});
+        const delivered = await order.find({orderStatus:"Delivered"});
+        const cancelled = await order.find({orderStatus:"Cancelled"});
+        const returned = await order.find({orderStatus:"Return Approved"});
+
+        const placedOrder = placed.length;
+        const shippedOrder = shipped.length;
+        const deliveredOrder = delivered.length;
+        const cancelledOrder = cancelled.length;
+        const returnedOrder = returned.length;
+
+        const cod = await order.find({paymentMethod:"cod"});
+        const online = await order.find({paymentMethod:"online"});
+
+        const codOrder = cod.length;
+        const onlineOrder = online.length;
+            res.render('admin/dashboard',{
+                totalRevenue : Math.ceil(totalRev),
+        todayRevenue : Math.ceil(todayRev),
+        monthRevenue : Math.ceil(monthRev),
+        placedOrder,
+        shippedOrder,
+        deliveredOrder,
+        cancelledOrder,
+        onlineOrder,
+        codOrder,
+        returnedOrder
+            });  
+        } catch (error) {
+           console.log(error) 
+        }
     } else {
         res.redirect('/adminLogin')
+    }
+}
+
+const getSales = (req,res)=>{
+    if(req.session.admin){
+        try {
+            let date = 0
+         order.find({orderStatus:"Delivered"}).then((orderData)=>{
+            res.render('admin/sales',{orderData,date});
+         });
+        } catch (error) {
+           console.log(error); 
+        }
+    }else{
+        res.redirect('/adminLogin')
+    }
+}
+
+const salesfilter = (req,res)=>{
+    if(req.session.admin){
+        try {
+            let date = req.body;
+            order.find({
+                orderStatus:"Delivered",
+                createdAt:{$gte:date.from,$lte:date.to}
+            }).then((orderData)=>{
+                if(orderData){
+                    res.render("admin/sales",{orderData,date});
+                }else{
+                    res.redirect("/sales");
+                }
+            })
+        } catch (error) {
+          console.log(error);  
+        }
+    } else{
+        res.redirect('/adminLogin')
+    }
+}
+
+const downsales = async(req,res)=>{
+    if(req.session.admin){
+        try {
+            let date = req.body;
+            if(date.from){
+                let orderData = await order.find({
+                    orderStatus:"Delivered",
+                    createdAt:{$gte:date.from,$lte:date.to}
+                });
+                const workbook = new excelJs.Workbook();
+                const worksheet = workbook.addWorksheet("My Sheet");
+                worksheet.columns = [
+                    {header:"OrderId",key:"OrderId",width:30},
+                    { header: "Customer", key: "Customer", width: 15 },
+                    { header: "Amount", key: "Amount", width: 15 },
+                    { header: "Status", key: "Status", width: 15 }
+                ];
+
+                orderData.forEach((orderData)=>{
+                    worksheet.addRow({
+                        OrderId:orderData._id,
+                        Customer:orderData.name,
+                        Amount:orderData.discountAmount,
+                        Status:orderData.orderStatus
+                    });
+                });
+                await workbook.xlsx.writeFile("order.xlsx").then((data) => {
+                    const location = path.join(__dirname + "../../order.xlsx");
+                    res.download(location);
+                  });
+            }else{
+                let orderData = await order.find({orderStatus:"Delivered"});
+
+                const workbook = new excelJs.Workbook();
+                const worksheet = workbook.addWorksheet("My sheet");
+
+                worksheet.columns = [
+                    { header: "OrderId", key: "OrderId", width: 30 },
+                    { header: "Customer", key: "Customer", width: 15 },
+                    { header: "Amount", key: "Amount", width: 15 },
+                    { header: "Status", key: "Status", width: 15 },
+                  ];
+
+                  orderData.forEach((order)=>{
+                    worksheet.addRow({
+                        OrderId:order._id,
+                        Customer:order.name,
+                        Amount:order.discountAmount,
+                        Status:order.orderStatus
+                    })
+                  })
+
+                  await workbook.xlsx.writeFile("order.xlsx").then((data) => {
+                    const location = path.join(__dirname + "../../order.xlsx");
+                    res.download(location);
+                  });
+            }
+        } catch (error) {
+           console.log(error); 
+        }
+    }else{
+        res.redirect('/adminLogin') 
     }
 }
 
@@ -274,6 +441,7 @@ const getOrders = async(req,res)=>{
             }
         }
     ]).then((orderDetails)=>{
+        console.log("Get order  = ",orderDetails);
         res.render('admin/order',{orderDetails});
     })
 }
@@ -295,7 +463,10 @@ const orderDetails = async(req,res)=>{
                     productQuantity:"$orderItems.quantity",
                     address:1,
                     name:1,
-                    phonenumber:1
+                    phonenumber:1,
+                    discount:1,
+                    discountAmount:1,
+                    totalAmount:1
                 }
             },
             {
@@ -313,6 +484,9 @@ const orderDetails = async(req,res)=>{
                     address:1,
                     name:1,
                     phonenumber:1,
+                    discount:1,
+                    discountAmount:1,
+                    totalAmount:1,
                     productDetail:{$arrayElemAt:["$productDetail",0]}
                 }
             },
@@ -328,7 +502,7 @@ const orderDetails = async(req,res)=>{
                 $unwind:'$category_name'
             }
         ]);
-        console.log("Product details order   = ",productData);
+        console.log("Product details order admin   = ",productData);
         res.render('admin/orderDetails',{productData});
     } catch(error){
         console.log(error);
@@ -339,14 +513,132 @@ const orderStatusChange = async(req,res)=>{
     try {
         const id = req.params.id;
         const data = req.body;
-        await order.updateOne({_id:id},
-            {
-                $set:{
-                    orderStatus:data.orderStatus,
-                    paymentStatus:data.paymentStatus
+        // console.log("Admin data in status change  =  ",data);
+        // console.log("Admin id in status change  =  ",id);
+        
+            const objId = mongoose.Types.ObjectId(id);
+            const fullOrder = await order.findOne({_id:id});
+            console.log("Full order detail amount:  ",fullOrder.totalAmount);
+            const orderData = await order.aggregate([
+                {
+                    $match:{_id:objId}
+                },
+                {
+                    $unwind:"$orderItems"
+                },
+                {
+                    $lookup:{
+                        from:"products",
+                        localField:"orderItems.productId",
+                        foreignField:"_id",
+                        as:"productDetail"
+                    }
+                },
+                {
+                    $project:{
+                        quantity:"$orderItems.quantity",
+                        productDetail:{$arrayElemAt:["$productDetail",0]}
+                    }
+                },
+                    {
+                        $addFields:{
+                            productPrice:{
+                                $multiply:["$quantity","$productDetail.price"]
+                            }
+                        }
+                    }
+            ]);
+            const sum = orderData.reduce((accumulator,object)=>{
+                return accumulator + object.productPrice;
+            },0);
+
+            const userData = await order.aggregate([
+                {
+                    $match:{_id:objId}
+                },
+                {
+                    $project:{
+                        user:"$userId"
+                    }
+                },
+                {
+                    $lookup:{
+                        from:"users",
+                        localField:"user",
+                        foreignField:"_id",
+                        as:"userDetail"
+                    }
+                },
+                {
+                    $unwind:"$userDetail"
                 }
-            })
-            res.redirect('/order');
+            ])
+            await order.updateOne({_id:id},
+                {
+                    $set:{
+                        orderStatus:data.orderStatus,
+                        paymentStatus:data.paymentStatus
+                    }
+                })
+                const orderDetail = await order.findOne({_id:id});
+            if(orderDetail.orderStatus==="Return Approved"){
+                         userModel.updateOne({_id:userData[0].user},{$inc:{Wallet:fullOrder.discountAmount}}).then((data)=>{
+                            console.log(data);
+                         });
+                 }
+             console.log("Order DETAIL in admin  =  ",orderData)
+            console.log("USerData in return admin  =  ",userData);
+        } catch (error) {
+            console.log(error);
+        }
+             res.redirect('/order');
+    }
+
+const getCouponPage = async(req,res) =>{
+    try {
+        const couponData = await coupon.find();
+        res.render('admin/coupon',{couponData})
+    } catch (error) {
+       console.log(error); 
+    }
+}
+
+const addCoupon = (req,res)=>{
+    try {
+        const data = req.body;
+        const dis = parseInt(data.discount);
+        const maxLimit = parseInt(data.maxLimit);
+        const discount = dis;
+
+        coupon.create({
+            coupon_code:data.couponName,
+            offer:discount,
+            max_amount:maxLimit,
+            expirationTime:data.expirationTime
+        }).then((data)=>{
+            console.log(data);
+            res.redirect('/coupon');
+        })
+    } catch (error) {
+       console.log(error); 
+    }
+}
+
+const deleteCoupon = async(req,res)=>{
+    try {
+        const id = req.params.id;
+        await coupon.updateOne({_id:id},{$set:{delete:true}})
+        res.redirect('/coupon');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const restoreCoupon = async(req,res)=>{
+    try {
+        const id = req.params.id;
+        await coupon.updateOne({_id:id},{$set:{delete:false}});
+        res.redirect('/coupon');
     } catch (error) {
         console.log(error);
     }
@@ -363,7 +655,12 @@ const orderStatusChange = async(req,res)=>{
 
 
 
+
+
+
 module.exports = {  getAdminLogin,postAdminLogin,getDashboard,getUserDetails,blockUser,
                     unblockUser,getLogout,addproducts,postAddProduct,getProductDetails,
                     editProduct,postEditProduct,getDelete,getCategory,addCategory,editCategory,
-                    deleteCategory,getRestore,getOrders,orderDetails,orderStatusChange}
+                    deleteCategory,getRestore,getOrders,orderDetails,orderStatusChange,
+                    getCouponPage,addCoupon,deleteCoupon,restoreCoupon,getSales,salesfilter,
+                downsales}

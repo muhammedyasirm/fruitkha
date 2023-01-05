@@ -82,7 +82,15 @@ userRoute.get('/savedAddress',userController.getSavedAddress);
 
 userRoute.post('/editAddress/:id',userController.postEditAddress);
 
-userRoute.get('/deleteAddress/:id',userController.deleteAddress)
+userRoute.get('/deleteAddress/:id',userController.deleteAddress);
+
+userRoute.get('/returnOrder/:id',userController.returnProduct);
+
+userRoute.post('/coupon-check',userController.couponCheck);
+
+userRoute.get('/about',userController.getAbout);
+
+
 
 
 

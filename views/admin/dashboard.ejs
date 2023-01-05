@@ -1,81 +1,176 @@
 
 <%- include('../partials/adminHeader')%>
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="container-fluid">
-          <!-- ============================================================== -->
-          <!-- Three charts -->
-          <!-- ============================================================== -->
-          <div class="row justify-content-between p-4">
-              <div class="col-lg-4 col-md-12 row pt-2 pb-2 border bg-dark  shadow">
-                  <div class="col-auto mx-auto">
-                      <div class="row">
-                          <div class="col-auto">
-                              <h3 class="box-title text-white">Total Orders</h3>
-                          </div>
-                          <div class="col-auto">
-                              <h4><span class="text-success" style="margin-top:5px;" id="totalOrders"></span></h4>
-                          </div>
-                      </div>
-                  </div>
+<div class="col py-3" style="overflow-x: hidden">
+<div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">My Dashboard</li>
+      </ol>
+      <!-- revenue Cards-->
+      <div class="row justify-content-evenly">
+        <div class="col-xl-4 col-sm-6 col-md-4 mb-3">
+          <div class="card text-white  o-hidden h-100" style="background-color: #868e95;  "  > 
+            <div class="card-body">
+              <div class="card-body-icon">
+                <i class="fa fa-fw fa-money-check"></i>
               </div>
-              <div class="col-lg-4 col-md-12 row pt-2 pb-2 border bg-dark shadow">
-                  <div class="col-auto mx-auto">
-                      <div class="row">
-                          <div class="col-auto">
-                              <h4 class="box-title text-white">Cash On Delivery</h4>
-                          </div>
-                          <div class="col-auto">
-                              <h4><span class="text-success" style="margin-top:5px;" id="COD"></span></h4>
-                          </div>
-                      </div>
-                  </div>
+              <div class="mr-5">
+                <p class="small mb-1">Today's Revenue</p>
+                <h3><strong>RS.<%= todayRevenue%></strong></h3>
               </div>
-              <div class="col-lg-4 col-md-12 row pt-2 pb-2 border bg-dark shadow">
-                  <div class="col-auto mx-auto">
-                      <div class="row">
-                          <div class="col-auto">
-                              <h3 class="box-title text-white">Razorpay</h3>
-                          </div>
-                          <div class="col-auto">
-                              <h4><span class="text-success" style="margin-top:5px;" id="razorpay"></span></h4>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-            
-      
-      
-      
-      
-          <!-- ============================================================== -->
-          <!-- PRODUCTS YEARLY SALES -->
-          <!-- ============================================================== -->
-          <div class="row">
-              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 container-fluid shadow">
-                  
-                  <div id="ct-visits" >
-                      <h3 class="box-title text-center">Sales</h3>
-                      <canvas id="myChart" style="width:100%; background-color: rgb(181, 187, 187); ;"></canvas>
-                  </div>
-              </div>
-          </div>
-      
-           <div class="row">
-              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 container-fluid shadow">
-                  
-                  <div id="ct-visits" >
-                      <h3 class="box-title text-center mt-5">Payment</h3>
-                       <canvas id="myChartD" style="width:100%;"></canvas>
-                  </div>
-              </div>
-          </div>
+            </div>
           
+          </div>
+        </div>
+        <div class="col-xl-4 col-sm-6  col-md-4 mb-3">
+          <div class="card text-white  o-hidden h-100" style="background-color: #868e95;">
+            <div class="card-body">
+              <div class="card-body-icon">
+                <i class="fa fa-fw fa-calendar"></i>
+              </div>
+              <div class="mr-5">
+                <p class="small mb-1">Monthly Revenue</p>
+                <h3><strong>RS.<%=monthRevenue%></strong></h3>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="col-xl-4 col-sm-6 col-md-4 mb-3">
+          <div class="card text-white o-hidden h-100" style="background-color: #868e95;">
+            <div class="card-body">
+              <div class="card-body-icon">
+                <i class="fa fa-fw fa-clock"></i>
+              </div>
+              <div class="mr-5">
+                <p class="small mb-1">Total Revenue</p>
+                <h3><strong>RS.<%= totalRevenue%></strong></h3>
+              </div>
+            </div>
+          
+          </div>
+        </div>
        
+      </div>
       
+      
+      <div class="d-flex ">
+        <div class="col-lg-8">
+          <!-- Example Bar Chart Card-->
+          <input type="number"  id="placed" value="<%=placedOrder%>" hidden>
+          <input type="number" id="shipped" value="<%=shippedOrder%>" hidden>
+          <input type="number" id="delivered" value="<%=deliveredOrder%>" hidden>
+          <input type="number" id="cancelled" value="<%=cancelledOrder%>" hidden>
+
+        <div class="card h-100">
+          <div class="card-header">
+            <i class="fa fa-bar-chart"></i> Orders Chart 
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-8  col-lg-12">
+                <canvas id="myBarChart" width="100" height="50"></canvas>
+              </div>
+              
+            </div>
+          </div>
+          <div class="card-footer small text-muted">
+            Updated yesterday at 11:59 PM
+          </div>
+        </div>
+        </div>
+
+        <div class="col-lg-4">
+          <!-- Example Pie Chart Card-->
+          <input type="number" id="cod" value="<%=codOrder%>" hidden>
+          <input type="number" id="online" value="<%=onlineOrder%>" hidden>
+
+          <div class="card h-100">
+            <div class="card-header">
+              <i class="fa fa-pie-chart"></i> Payment Chart 
+            </div>
+            <div class="card-body">
+              <canvas id="myPieChart" width="100%" height="100"></canvas>
+            </div>
+            <div class="card-footer small text-muted">
+              Updated yesterday at 11:59 PM
+            </div>
+          </div>
+        </div>
       </div>
-      </div>
+    </div>
+  </div>
+  </div>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+      <script>
+        Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#292b2c';
+
+// -- Bar Chart Example
+var ctx = document.getElementById("myBarChart");
+let placed = document.getElementById("placed").value;
+let shipped = document.getElementById("shipped").value;
+let delivered = document.getElementById("delivered").value;
+let cancelled = document.getElementById("cancelled").value;
+
+var myLineChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["Placed", "Shipped", "Deliverd", "Cancelled", ],
+    datasets: [{
+      label: "orders",
+      backgroundColor: ["rgb(93, 93, 139)", "rgb(167, 167, 89)", "rgb(74, 127, 74)", "rgb(115, 67, 67)"],
+      borderColor: "rgba(2,117,216,1)",
+      data: [placed, shipped, delivered, cancelled],
+    }],
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        time: {
+          unit: 'month'
+        },
+        gridLines: {
+          display: false
+        },
+       
+      }],
+      yAxes: [{
+        gridLines: {
+          display: true
+        }
+      }],
+    },
+    legend: {
+      display: false
+    }
+  }
+});
+// -- Pie Chart Example
+var ctx = document.getElementById("myPieChart");
+let cod =document.getElementById('cod').value;
+let online = document.getElementById('online').value;
+var myPieChart = new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: [ "COD", "Online", ],
+    datasets: [{
+      data: [cod, online],
+      backgroundColor: ['rgb(93, 93, 139)', 'rgb(74, 127, 74)',],
+    }],
+  },
+});
+
+$(document).ready(function() {
+  $('Table').DataTable();
+});
+
+
+      </script>
       </main>
 
 

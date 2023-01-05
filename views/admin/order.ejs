@@ -1,3 +1,4 @@
+
 <%- include('../partials/adminHeader')%>
 <div class="col py-3">
 
@@ -44,16 +45,23 @@
                             <td>
                                 <%= order.deliveryDate %>
                             </td>
-                            <td>₹ <%= order.totalAmount %>
+                            <td>₹ <%= order.discountAmount %>
                             </td>
                             <td>
                                 <a href="/orderDetails/<%=order._id%> " class="btn btn-secondary ">View</a>
                                 <!-- <a href="" class="btn btn-success ">Edit</a> -->
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                <% if(order.orderStatus==="Return Approved" || order.orderStatus==="Cancelled"){%> 
+                                <button hidden type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal-<%= order._id %>">
                                     Edit
                                 </button>
+                                <% }else{ %>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal-<%= order._id %>">
+                                    Edit
+                                </button>
+                                    <% } %>  
                            
                                 <!-- Modal -->
                                 <div class="modal fade" id="exampleModal-<%= order._id %>" tabindex="-1"
@@ -71,14 +79,17 @@
                                                         <label for="recipient-name" name="orderStatus"
                                                             class="col-form-label"> Order Status</label>
                                                         <select class="form-select" name="orderStatus" aria-label="Default select example" id="">
-                                                            <% if(order) %> 
-                                                            
+                                                            <% if(order.orderStatus==="Return Pending"){%>
+                                                                <option selected><%= order.orderStatus %></option>
+                                                                <option value="Return Approved" name="orderStatus">Accept Return</option>
+                                                                <option value="Return Denied" name="orderStatus">Deny Return</option>
+                                                                <% } else { %> 
                                                             <option selected><%= order.orderStatus %></option>
                                                             <option value="Pending" name="orderStatus">Pending</option>
                                                             <option value="Shipped" name="orderStatus">Shipped</option>
                                                             <option value="Delivered" name="orderStatus">Delivered</option>
                                                             <option value="Cancelled" name="orderStatus">Cancel</option>
-                                                           
+                                                           <% } %> 
                                                         </select>
                                                     </div>
                                                     <div class="mb-3">

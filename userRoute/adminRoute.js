@@ -59,7 +59,19 @@ adminRoute.get('/orderDetails/:id',adminController.orderDetails);
 
 adminRoute.post('/orderStatusChange/:id',adminController.orderStatusChange);
 
+adminRoute.get('/coupon',adminController.getCouponPage);
 
+adminRoute.post('/addcoupon',adminController.addCoupon);
+
+adminRoute.get('/deleteCoupon/:id',adminController.deleteCoupon);
+
+adminRoute.get("/restoreCoupon/:id",adminController.restoreCoupon);
+
+adminRoute.get("/sales",adminController.getSales);
+
+adminRoute.post('/salesFilter',adminController.salesfilter);
+
+adminRoute.post('/downSales',adminController.downsales);
 
 
 

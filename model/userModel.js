@@ -51,6 +51,10 @@ const mongoose = require('mongoose');
         required: true,
         trim:true
     },
+    Wallet:{
+        type:Number,
+        default:0
+    },
     Block:{
         type:Boolean,
         default:false

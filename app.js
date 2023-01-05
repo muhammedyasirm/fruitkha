@@ -51,6 +51,10 @@ app.use('/',userRoute);
 
 app.use('/',adminRoute);
 
+app.use((req, res) => {
+    res.status(404).render('user/404');
+});
+
 
 
 

@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="col-md-3 d-flex flex-column">
-                            <b>Total Amount:</b>&nbsp;<%=order.totalAmount%> <br />
+                            <b>Total Amount:</b>&nbsp;<%=order.discountAmount%> <br />
                                 <b>Payment:</b>
                                 <%= order.paymentMethod %>( <%= order.paymentStatus %> )
                         </div>
@@ -51,7 +51,15 @@
                                                 <small class="text-danger">
                                                     <%= order.orderStatus %>
                                                 </small><br />
-                                                <% } %>
+                                                <% }else if(order.orderStatus==="Return Pending"){%>
+                                                    <small class="text-danger">
+                                                        <%= order.orderStatus %>
+                                                    </small><br />
+                                                    <% }else if(order.orderStatus==="Return Approved"){%> 
+                                                        <small class="text-danger">
+                                                            <%= order.orderStatus %>
+                                                        </small><br />
+                                                        <% } %> 
                                                     <b>Delivery expected: </b>
                                                     <%=order.deliveryDate%>
                         </div>
@@ -67,10 +75,38 @@
                                 Cancel
                             </button>
                             <% }else if(order.orderStatus==="Delivered" ){ %>
-                                 
-                                    <a href="#"><button type="button" class="btn btn-dark btn-sm" >
-                                        Return
-                                    </button></a>
+                                <button type="button" class="btn btn-warning" data-toggle="modal"
+                                data-target="#exampleModal1-<%= order._id %>">
+                                Return
+                            </button>
+                            <div class="modal fade" id="exampleModal1-<%= order._id %>" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Return Confirmation</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure to return your order?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <a href="/returnOrder/<%=order._id%>"> <button type="button"
+                                                    class="btn btn-primary">Confirm</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }else if(order.orderStatus==="Return Pending" || order.orderStatus==="Return Approved" || order.orderStatus==="Return Denied"){ %>
+                                <button hidden type="button" class="btn btn-warning" data-toggle="modal"
+                                data-target="#exampleModal1-<%= order._id %>">
+                                Return
+                            </button>
+                                    
                                     <% } else{ %> 
                                 <button type="button" class="btn btn-warning" data-toggle="modal"
                                 data-target="#exampleModal-<%= order._id %>">

@@ -54,6 +54,13 @@ const orderSchema = new Schema(
         deliveryDate:{
             type:String
         },
+        discount:{
+            type:String,
+            default:"0"
+        },
+        discountAmount:{
+            type:Number
+        }
     },
     {
         timestamps:true

@@ -17,201 +17,189 @@
 	<!-- end breadcrumb section -->
 
 	<!-- check out section -->
-	<div class="checkout-section mt-150 mb-150">
+	<section class="mt-5">
 		<div class="container">
-			<div class="row">
-				<div class="col-md-8 order-md-1">
-					<section>
-						<div class="container">
-							<form id="placeOrder">
+			<form id="checkout">
+			  <div class="row">
+				<div class="order col-md-6 mt-3">
+				  <h5 class="white">Order Details:</h5>
+				  <div
+					style="border: 1px solid; width: 100%;"
+					class="p-4 d9"
+				  >
+				  <div class="w-100 w-md-50 align-items-center" id="apply" style="display: flex;">
+					<lable for="">Coupon:</lable>
+					<div class="d-flex align-items-center ms-2" style="background-color: #fff;border-radius: 10px;">
+					  <input type="text" id="coupon" name="coupon" class="form-control he" placeholder="Coupon Code" style="outline: none; border: none;border-radius: 5px;">
+					  <button class="btn btn-sm white blue he" type="button" onclick="cou('<%= sum %>')">Apply</button>
+					</div>
+				  </div>
+				  <div class="d-flex w-100 align-items-center" id="applied" style="display: none !important;">
+					<lable for="">Coupon:</lable>
+					<div class="d-flex flex-column align-items-start p-2 ms-2" id="applied" style="border: 1px solid;">
+					  <div style="font-size: 10px;"><a onclick="remove('<%= sum %>')">Remove</a></div>
+					  <h6 id="coup_code">NOW20</h6>
+					  <div> discount of &nbsp;<label for="" id="per"> 20% &nbsp;</label> upto &nbsp;Rs.<label for="" id="amount">200</label></div>
+					</div>
+				  </div>
+				  <h6>Products: </h6>
+				  <table class="w-100">
+					<% productData.forEach((product)=>{ %>
+					  <tr class="text-center">
+						<td><%= product.productDetail.product_name %></td>
+						<td><%= product.productQuantity%></td>
+						<td>x Rs.<%= product.productDetail.price %></td>
+					  </tr>
+					  <% }) %>
+				  </table>                  
+					<hr>
+					<table class="w-100">
+					  <tr class="text-center">
+						<th>Product total:</th>
+						<th>Rs.<%= sum %></th>
+					  </tr>
+					  <tr class="text-center">
+						<th>Discount:</th>
+						<th>- Rs.<label for="" id="discount">0</label></th>
+					  </tr>
+					  <tr class="text-center">
+						<th>Total:</th>
+						<th>Rs.<label for="" id="total"><%= sum %></label></th>
+					  </tr>
+					</table>
+				  </div>
+				</div>
+				<div class="shipadrss col-md-6 mt-3">
+				  <h5 class="white">Shipping Address:</h5>
+				  <div class="form-group">
+					<select class="form-control" name="address" id="exampleFormControlSelect1" style="width: 350px;">
+						<% userData.addressDetails.forEach((address)=>{ %>
+					  <option name="address">
+						<%=address.apartment %>,<%=address.postoffice %>,<%=address.landmark %>,<%=address.area %>,<%=address.district %>,<%=address.state %>
+					  </option>
+					  <% }) %>
+					</select>
+				  </div>
+			
+				</div>
+				<div class="payment col-md-6 mt-3">
+				  <h5 class="white">Payment:</h5>
+				  <div
+					style="border: 1px solid"
+					class="p-4 d-flex align-content-center align-items-center d9"
+				  >
+					<input type="radio" name="pay" value="cod" class="me-1" required checked/>
+					  Cash On Delivery (COD)
+				  </div>
+				  <div
+					style="border: 1px solid"
+					class="p-4 d-flex align-content-center align-items-center d9"
+				  >
+				  <input type="radio" name="pay" value="online" class="me-1" required/>
+					Pay Online
+				  </div>
+				</div>
+  
+				<div class="payment col-md-6 mt-3 p-5" >
+				  <button type="submit" class="btn-primary con btn-lg w-100 mt-4">
+					Confirm Order
+				  </button>
+				</div>
+			  </div>
+			</form>
+			<div class="payment col-md-6 mt-3">
+			<div style="border: 1px solid" class="p-4 d-flex align-content-center align-items-center d9">
+				<button class="boxed-btn"data-toggle="modal"
+				data-target="#exampleModal">Add Address</button>  
+				</div>
+			</div>
+				<!-- Modal -->
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Add New Address</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							  
 
-								<label class="col-xs-3 control-label">Select Shipping Address</label>
-								<select class="form-select form-select-lg" name="address" aria-label="GFG Small Select"
-									style="width: 300px;">
-									
-									<% userData.addressDetails.forEach((address)=>{ %>
-										<option name="address">
-											<%=address.apartment %>,<%=address.postoffice %>,<%=address.landmark %>,<%=address.area %>,<%=address.district %>,<%=address.state %>
-											</option>
-										<% }) %>
-								</select>
 
-								<div class="d-block my-3">
-									<div class="custom-control custom-radio">
-										<input id="credit" name="paymentMethod" type="radio" value="COD"
-											class="custom-control-input" checked required />
-										<label class="custom-control-label" for="credit">COD</label>
+							<form action="/addNewAddress" method="post">
+								<div class="modal-body">
+									<div class="mb-3">
+										<label for="recipient-name"
+											class="col-form-label">Housename:</label>
+										<input required type="text" class="form-control" id="housename"
+											name="housename" />
+										<p id="houseError" style="color: red"></p>
 									</div>
-
-									<div class="custom-control custom-radio">
-										<input id="debit" name="paymentMethod" type="radio" value="Online"
-											class="custom-control-input" required />
-										<label class="custom-control-label" for="debit">Online</label>
+									<div class="mb-3">
+										<label for="recipient-name" class="col-form-label">Area:</label>
+										<input required type="text" class="form-control" id="area"
+											name="area" />
+										<p id="areaError" style="color: red"></p>
 									</div>
-
-									<button type="submit" value="submit" class="btn btn-secondary mt-5">
-										Place order
+									<div class="mb-3">
+										<label for="recipient-name" class="col-form-label">Landmark:</label>
+										<input required type="text" class="form-control" id="landmark"
+											name="landmark" />
+										<p id="landmarkError" style="color: red"></p>
+									</div>
+									<div class="mb-3">
+										<div class="row">
+											<div class="col-md-6 mb-3">
+												<label for="firstName">District</label>
+												<input required type="text" class="form-control"
+													id="district" name="district" />
+												<p id="stateError" style="color: red"></p>
+											</div>
+											<div class="col-md-6 mb-3">
+												<label for="lastName">State</label>
+												<input required type="text" class="form-control" id="state"
+													name="state" />
+												<p id="pincodeError" style="color: red"></p>
+											</div>
+										</div>
+									</div>
+									<div class="mb-3">
+										<div class="row">
+											<div class="col-md-6 mb-3">
+												<label for="firstName">Post office</label>
+												<input required type="text" class="form-control"
+													id="postoffice" name="postoffice" />
+												<p id="stateError" style="color: red"></p>
+											</div>
+											<div class="col-md-6 mb-3">
+												<label for="lastName">Pincode</label>
+												<input required type="text" class="form-control" id="pin"
+													name="pin" />
+												<p id="pincodeError" style="color: red"></p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">
+										Close
 									</button>
-
+									<button type="submit" value="submit" class="btn btn-primary">
+										Add
+									</button>
 								</div>
 							</form>
-
-
-							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-secondary" data-toggle="modal"
-								data-target="#exampleModal">
-								Add address
-							</button>
-
-							<!-- Modal -->
-							<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-								aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel">Add New Address</h5>
-											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-										<div class="modal-body">
-                                              
-
-
-											<form action="/addNewAddress" method="post">
-												<div class="modal-body">
-													<div class="mb-3">
-														<label for="recipient-name"
-															class="col-form-label">Housename:</label>
-														<input required type="text" class="form-control" id="housename"
-															name="housename" />
-														<p id="houseError" style="color: red"></p>
-													</div>
-													<div class="mb-3">
-														<label for="recipient-name" class="col-form-label">Area:</label>
-														<input required type="text" class="form-control" id="area"
-															name="area" />
-														<p id="areaError" style="color: red"></p>
-													</div>
-													<div class="mb-3">
-														<label for="recipient-name" class="col-form-label">Landmark:</label>
-														<input required type="text" class="form-control" id="landmark"
-															name="landmark" />
-														<p id="landmarkError" style="color: red"></p>
-													</div>
-													<div class="mb-3">
-														<div class="row">
-															<div class="col-md-6 mb-3">
-																<label for="firstName">District</label>
-																<input required type="text" class="form-control"
-																	id="district" name="district" />
-																<p id="stateError" style="color: red"></p>
-															</div>
-															<div class="col-md-6 mb-3">
-																<label for="lastName">State</label>
-																<input required type="text" class="form-control" id="state"
-																	name="state" />
-																<p id="pincodeError" style="color: red"></p>
-															</div>
-														</div>
-													</div>
-													<div class="mb-3">
-														<div class="row">
-															<div class="col-md-6 mb-3">
-																<label for="firstName">Post office</label>
-																<input required type="text" class="form-control"
-																	id="postoffice" name="postoffice" />
-																<p id="stateError" style="color: red"></p>
-															</div>
-															<div class="col-md-6 mb-3">
-																<label for="lastName">Pincode</label>
-																<input required type="text" class="form-control" id="pin"
-																	name="pin" />
-																<p id="pincodeError" style="color: red"></p>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-														Close
-													</button>
-													<button type="submit" value="submit" class="btn btn-primary">
-														Add
-													</button>
-												</div>
-											</form>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-
-
 						</div>
-					</section>
-				</div>
-
-				<div class="col-lg-4">
-					<div class="order-details-wrap">
-						<table class="order-details">
-							<thead>
-								<tr>
-									<th>Your order Details</th>
-									<th>price</th>
-								</tr>
-							</thead>
-							<tbody class="order-details-body">
-								<% productData.forEach((product)=>{ %>
-									<tr>
-										<td>
-											<%= product.productDetail.product_name %> (<%= product.productQuantity%>kg)
-										</td>
-
-										<% let price=product.productDetail.price %>
-											<% let quantity=product.productQuantity %>
-												<% let total=price*quantity %>
-
-
-													<td>
-														<%=total %>
-													</td>
-
-									</tr>
-									<% }) %>
-
-									<tr>
-										<td>
-											Shipping Charge
-										</td>
-										<td>
-											<strong>
-												Free
-											</strong>
-										</td>
-
-									</tr>
-
-										<tr>
-											<td>
-												<p><strong>Total</strong></p>
-											</td>
-											<td>
-												<strong>
-													<%=sum%>
-												</strong>
-											</td>
-
-										</tr>
-							</tbody>
-
-						</table>
-
+						
 					</div>
 				</div>
 			</div>
+			
+		  </div>
 		</div>
-	</div>
+	  </section>
 	<!-- end check out section -->
 
 	<!-- logo carousel -->
@@ -337,39 +325,93 @@
 	<!-- main js -->
 	<script src="assets/js/main.js"></script>
 
-	<script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+			crossorigin="anonymous"></script>
+			<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+			<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
-		$("#placeOrder").submit((e)=>{
+	<script>
+		$("#checkout").submit((e)=>{
 			e.preventDefault();
 			$.ajax({
 				url:'/placeOrder',
 				method:'post',
-				data:$('#placeOrder').serialize(),
+				data:$('#checkout').serialize(),
 				success:(response)=>{
-					if(response.success){
-						location.href = "/orderConfirmation";
+					if(response[0].success){
+						location.href = `/orderConfirmation`;
 					}else{
 						razorPay(response);
 					}
 				}
 			})
 		})
+
+
+		function cou(amount) {
+        const code = document.getElementById('coupon').value;
+        $.ajax({
+          url: "/coupon-check",
+          method: "post",
+          data: {
+            code,
+            amount,
+          },
+          success: (response) => {
+                if (response[0].success) {
+                  swal("Coupon Added!", "You got a discount of Rs." + response[0].dis, "success")
+                    .then(() => {
+                      document.getElementById('discount').innerHTML = response[0].dis;
+                      const total = Number(amount) - Number(response[0].dis);
+                      document.getElementById('total').innerHTML = total;
+                      applied(response[1].check);
+                    });
+                } else {
+                  swal("Error", response[0].message , "error")
+                    .then(() => {
+                          location.reload()
+                  });
+                }
+            },
+          });
+      }
+
+
+	  function applied(data) {
+        document.getElementById('coup_code').innerHTML = data.coupon_code;
+        document.getElementById('per').innerHTML = data.offer;
+        document.getElementById('amount').innerHTML = data.max_amount;
+        document.getElementById('applied').style.display = 'block';
+        document.getElementById('apply').style.display = 'none';
+      }
+      function remove(sum) {
+        // document.getElementById('applied').style.display = 'none';
+		document.getElementById('coupon').value = ""
+        document.getElementById('applied').style.setProperty("display","none","important");
+        document.getElementById('apply').style.display = 'flex';
+        document.getElementById('discount').innerHTML = 0;
+        document.getElementById('total').innerHTML = sum;
+		
+      }
 	</script>
 	<script>
 			function razorPay(order) {
+				const orderData = order[0].orders
 		var options = {
 			"key": "rzp_test_4fGKqxVpJTRSh2", // Enter the Key ID generated from the Dashboard
-			"amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+			"amount": orderData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
 			"currency": "INR",
 			"name": "Frutica",
 			"description": "Test Transaction",
 			"image": "/assets/img/logo.png",
-			"order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+			"order_id": orderData.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
 			"handler": function (response) {
 				// alert(response.razorpay_payment_id);
 				// alert(response.razorpay_order_id);
 				// alert(response.razorpay_signature)
-				verifyPayment(response, order);
+				verifyPayment(response, orderData);
 			},
 			"prefill": {
 				"name": "Fruitikha",
@@ -382,6 +424,7 @@
 			"theme": {
 				"color": "#3399cc"
 			}
+			
 		};
 		var rzp1 = new Razorpay(options);
 		rzp1.on('payment.failed', function (response) {
@@ -395,10 +438,9 @@
 			location.href = "/paymentFail";
 		});
 		rzp1.open();
-
 	}
+	
 	function verifyPayment(payment, order) {
-
 		$.ajax({
 			url: "/verifyPayment",
 			data: {
@@ -422,3 +464,4 @@
 	</body>
 
 	</html>
+	

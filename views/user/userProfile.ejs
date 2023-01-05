@@ -5,7 +5,7 @@
             <div class="col-lg-8 offset-lg-2 text-center">
                 <div class="breadcrumb-text">
                     <p>Fresh and Organic</p>
-                    <h1>Check Out Product</h1>
+                    <h1>User Profile</h1>
                 </div>
             </div>
         </div>
@@ -22,6 +22,15 @@
                 <span class="font-weight-bold"><%=userData.Fullname%></span>
                 <span class="text-black-50"><%=userData.Email%></span>
                 <span> </span>
+            </div>
+            <div class="list-box d-flex justify-content-start align-items-center">
+                <div class="list-icon">
+                    <i class="fas fa-sync"></i>
+                </div>
+                <div class="content">
+                    <h3>Wallet Balance</h3>
+                    <p>₹<%=userData.Wallet%></p>
+                </div>
             </div>
         </div>
         <div class="col-md-5 border-right">
