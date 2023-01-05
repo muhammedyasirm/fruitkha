@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 userRoute.use(bodyParser.json());
 userRoute.use(bodyParser.urlencoded({extended: true}));
 
-userRoute.get('/homeN', userController.getHomeN);
+userRoute.get('/', userController.getHomeN);
 
 userRoute.get('/userLogin',userController.getUserLogin);
 

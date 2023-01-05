@@ -141,7 +141,7 @@ const postLogin = async(req,res) =>{
             req.session.consumer = req.body.Email;
             req.session.userId = consumer._id;
             
-            res.redirect('/homeN')
+            res.redirect('/')
            }else{
             res.render('user/login', { invalid: "Inavlid User"});
            }
@@ -156,7 +156,7 @@ const postLogin = async(req,res) =>{
 const getLogout = (req,res) =>{
         try{
             req.session.destroy()
-            res.redirect('/homeN')
+            res.redirect('/')
         } catch (error) {
             res.render('user/500');
         }
@@ -175,7 +175,7 @@ const getShop = async(req,res) =>{
 }
 
 const getHome = (req,res) =>{
-    res.redirect('/homeN');
+    res.redirect('/');
 }
 
 const getProductView = async(req,res)=>{
@@ -764,7 +764,6 @@ const couponCheck = async(req,res)=>{
                     if(proExist!=-1){
                         console.log("productExist",proExist);
                         res.json({productExist:true})
-                        console.log("Errorr productExist");
                     } else{
                         wishlist.updateOne(
                             {userId:userData._id},{$push:{product:proObj}}
