@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const path=require('path');
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/fruits');
+mongoose.connect('mongodb+srv://yasernazer:zpiEHIYOcFeMR5ct@cluster0.4hvfntj.mongodb.net/');
 const db = mongoose.connection;
 db.on('error',console.log.bind(console,"connection error"));
 db.once('open',function(callback){
